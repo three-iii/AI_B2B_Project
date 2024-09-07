@@ -1,0 +1,15 @@
+services:
+  b2b-db:
+    image: postgres
+    container_name: b2b_postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/postgresql/conf.d:/etc/postgresql/conf.d
+      - ./db/postgresql:/var/lib/postgresql
+      - ./db/postgresql/initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      - TZ=Asia/Seoul
+      - POSTGRES_DB=b2b
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwer
