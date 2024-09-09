@@ -1,5 +1,6 @@
 package com.three_iii.service.domain;
 
+import com.three_iii.service.application.dto.CompanyUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,4 +49,9 @@ public class Company {
     @Builder.Default
     private Boolean is_delete = false;
 
+    public void update(CompanyUpdateRequest requestDto) {
+        this.name = requestDto.getName() == null ? this.name : requestDto.getName();
+        this.type = requestDto.getType() == null ? this.type : requestDto.getType();
+        this.address = requestDto.getAddress() == null ? this.address : requestDto.getAddress();
+    }
 }
