@@ -11,8 +11,10 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,12 +37,13 @@ public class Company {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private CompanyStatusEnum type;
+    private CompanyTypeEnum type;
 
     @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
-    private Boolean is_delete;
+    @Builder.Default
+    private Boolean is_delete = false;
 
 }
