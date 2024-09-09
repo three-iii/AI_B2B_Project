@@ -2,11 +2,12 @@ package com.three_iii.service.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "p_company")
-public class Company {
+@Table(name = "p_product")
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Company company;
 
     //TODO 안지연
     // hub 매핑
@@ -36,11 +41,7 @@ public class Company {
     private String name;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private CompanyTypeEnum type;
-
-    @Column(nullable = false)
-    private String address;
+    private int quantity;
 
     @Column(nullable = false)
     @Builder.Default

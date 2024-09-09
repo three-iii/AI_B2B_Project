@@ -1,5 +1,5 @@
 package com.three_iii.service.domain;
 
-public enum CompanyStatusEnum {
+public enum CompanyTypeEnum {
     PRODUCTION_COMPANY, RECEIPT_COMPANY
 }
