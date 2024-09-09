@@ -44,4 +44,11 @@ public class CompanyService {
     public Page<CompanyFindResponse> findAllCompany(String keyword, Pageable pageable) {
         return companyRepository.searchCompany(keyword, pageable);
     }
+
+    @Transactional
+    public void deleteCompany(UUID companyId) {
+        companyRepository.findById(companyId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+        companyRepository.delete(companyId);
+    }
 }

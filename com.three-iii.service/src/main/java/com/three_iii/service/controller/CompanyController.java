@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,4 +50,10 @@ public class CompanyController {
         return Response.success(companyService.findAllCompany(keyword, pageable));
     }
 
+    @DeleteMapping("/{companyId}")
+    @Operation(summary = "업체 삭제", description = "업체를 삭제한다.")
+    public Response<?> deleteCompany(@PathVariable UUID companyId) {
+        companyService.deleteCompany(companyId);
+        return Response.success("해당 업체가 삭제되었습니다.");
+    }
 }
