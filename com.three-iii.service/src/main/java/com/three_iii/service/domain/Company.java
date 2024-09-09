@@ -23,7 +23,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "p_company")
 @Where(clause = "is_delete = false")
-public class Company {
+public class Company extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,10 +44,6 @@ public class Company {
 
     @Column(nullable = false)
     private String address;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean is_delete = false;
 
     public void update(CompanyUpdateRequest requestDto) {
         this.name = requestDto.getName() == null ? this.name : requestDto.getName();

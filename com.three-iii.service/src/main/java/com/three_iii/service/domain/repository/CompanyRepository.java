@@ -12,6 +12,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID>, Company
     Boolean existsByName(String name);
 
     @Modifying
-    @Query("UPDATE Company a SET a.is_delete = true WHERE a.id = :companyId")
+    @Query("UPDATE Company a SET a.deletedAt = CURRENT_TIMESTAMP, a.is_delete = true WHERE a.id = :companyId")
     void delete(@Param("companyId") UUID companyId);
 }
