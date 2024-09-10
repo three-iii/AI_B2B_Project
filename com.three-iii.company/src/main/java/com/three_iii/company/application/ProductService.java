@@ -14,6 +14,8 @@ import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +30,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductCreateRequest requestDto) {
         // TODO 허브 검사
         // 업체 검사
-        Company company = companyRepository.findById(requestDto.getCompanyId())
-            .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+        Company company = getCompany(requestDto.getCompanyId());
 
         // 상품명 중복 검사
         if (productRepository.existsByNameAndCompany(requestDto.getName(), company)) {
@@ -46,6 +47,17 @@ public class ProductService {
         return ProductResponse.fromEntity(product);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductResponse> findAllProduct(String keyword, UUID hubId, UUID companyId,
+        Pageable pageable) {
+//        // TODO 허브 검사
+        // 업체 검사
+        if (companyId != null) {
+            getCompany(companyId);
+        }
+        return productRepository.searchProduct(keyword, hubId, companyId, pageable);
+    }
+
     @Transactional
     public ProductResponse updateProduct(ProductUpdateRequest requestDto, UUID productId) {
         Product product = getProduct(productId);
@@ -57,6 +69,11 @@ public class ProductService {
     public void deleteProduct(UUID productId) {
         Product product = getProduct(productId);
         product.delete();
+    }
+
+    private Company getCompany(UUID companyId) {
+        return companyRepository.findById(companyId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
     }
 
     private Product getProduct(UUID productId) {
