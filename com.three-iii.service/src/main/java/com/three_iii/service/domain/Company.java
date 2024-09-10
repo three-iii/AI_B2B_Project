@@ -1,5 +1,6 @@
 package com.three_iii.service.domain;
 
+import com.three_iii.service.application.dto.CompanyUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +22,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "p_company")
-public class Company {
+@Where(clause = "is_delete = false")
+public class Company extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -42,8 +45,9 @@ public class Company {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean is_delete = false;
-
+    public void update(CompanyUpdateRequest requestDto) {
+        this.name = requestDto.getName() == null ? this.name : requestDto.getName();
+        this.type = requestDto.getType() == null ? this.type : requestDto.getType();
+        this.address = requestDto.getAddress() == null ? this.address : requestDto.getAddress();
+    }
 }

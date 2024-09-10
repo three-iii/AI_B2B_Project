@@ -6,6 +6,8 @@ import static com.three_iii.service.exception.ErrorCode.NOT_FOUND_COMPANY;
 import com.three_iii.service.application.dto.CompanyCreateRequest;
 import com.three_iii.service.application.dto.CompanyCreateResponse;
 import com.three_iii.service.application.dto.CompanyFindResponse;
+import com.three_iii.service.application.dto.CompanyUpdateRequest;
+import com.three_iii.service.application.dto.CompanyUpdateResponse;
 import com.three_iii.service.domain.Company;
 import com.three_iii.service.domain.repository.CompanyRepository;
 import com.three_iii.service.exception.ApplicationException;
@@ -43,5 +45,20 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public Page<CompanyFindResponse> findAllCompany(String keyword, Pageable pageable) {
         return companyRepository.searchCompany(keyword, pageable);
+    }
+
+    @Transactional
+    public void deleteCompany(UUID companyId) {
+        companyRepository.findById(companyId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+        companyRepository.delete(companyId);
+    }
+
+    @Transactional
+    public CompanyUpdateResponse updateCompany(UUID companyId, CompanyUpdateRequest requestDto) {
+        Company company = companyRepository.findById(companyId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+        company.update(requestDto);
+        return CompanyUpdateResponse.fromEntity(company);
     }
 }
