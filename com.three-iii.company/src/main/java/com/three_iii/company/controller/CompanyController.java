@@ -3,8 +3,7 @@ package com.three_iii.company.controller;
 
 import com.three_iii.company.application.CompanyService;
 import com.three_iii.company.application.dto.CompanyCreateRequest;
-import com.three_iii.company.application.dto.CompanyCreateResponse;
-import com.three_iii.company.application.dto.CompanyFindResponse;
+import com.three_iii.company.application.dto.CompanyResponse;
 import com.three_iii.company.application.dto.CompanyUpdateRequest;
 import com.three_iii.company.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,20 +33,20 @@ public class CompanyController {
 
     @PostMapping
     @Operation(summary = "업체 생성", description = "업체를 생성한다.")
-    public Response<CompanyCreateResponse> createCompany(
+    public Response<CompanyResponse> createCompany(
         @RequestBody @Valid CompanyCreateRequest requestDto) {
         return Response.success(companyService.createCompany(requestDto));
     }
 
     @GetMapping("/{companyId}")
     @Operation(summary = "업체 단건 조회", description = "업체를 단건 조회한다.")
-    public Response<CompanyFindResponse> findCompany(@PathVariable UUID companyId) {
+    public Response<CompanyResponse> findCompany(@PathVariable UUID companyId) {
         return Response.success(companyService.findCompany(companyId));
     }
 
     @GetMapping
     @Operation(summary = "업체 전체 조회", description = "업체 전체 조회를 한다.")
-    public Response<Page<CompanyFindResponse>> findAllCompany(
+    public Response<Page<CompanyResponse>> findAllCompany(
         @RequestParam(required = false) String keyword, Pageable pageable) {
 
         return Response.success(companyService.findAllCompany(keyword, pageable));
@@ -55,7 +54,7 @@ public class CompanyController {
 
     @PatchMapping("/{companyId}")
     @Operation(summary = "업체 수정", description = "업체를 수정한다.")
-    public Response<?> updateCompany(@PathVariable UUID companyId,
+    public Response<CompanyResponse> updateCompany(@PathVariable UUID companyId,
         @RequestBody CompanyUpdateRequest requestDto) {
         return Response.success(companyService.updateCompany(companyId, requestDto));
     }

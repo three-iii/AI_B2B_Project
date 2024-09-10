@@ -1,6 +1,5 @@
 package com.three_iii.company.application.dto;
 
-import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.CompanyTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,12 +17,4 @@ public class CompanyCreateRequest {
     private CompanyTypeEnum type;
     @NotNull
     private String address;
-
-    public static Company toEntity(CompanyCreateRequest requestDto) {
-        return Company.builder()
-            .name(requestDto.getName())
-            .type(requestDto.getType())
-            .address(requestDto.getAddress())
-            .build();
-    }
 }
