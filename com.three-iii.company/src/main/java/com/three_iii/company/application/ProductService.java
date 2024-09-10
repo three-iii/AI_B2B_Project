@@ -2,14 +2,17 @@ package com.three_iii.company.application;
 
 import static com.three_iii.company.exception.ErrorCode.DUPLICATED_NAME;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_COMPANY;
+import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_PRODUCT;
 
 import com.three_iii.company.application.dto.ProductCreateRequest;
 import com.three_iii.company.application.dto.ProductResponse;
+import com.three_iii.company.application.dto.ProductUpdateRequest;
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,5 +38,29 @@ public class ProductService {
 
         Product product = Product.create(requestDto, company);
         return ProductResponse.fromEntity(productRepository.save(product));
+    }
+
+    @Transactional(readOnly = true)
+    public ProductResponse findProduct(UUID productId) {
+        Product product = getProduct(productId);
+        return ProductResponse.fromEntity(product);
+    }
+
+    @Transactional
+    public ProductResponse updateProduct(ProductUpdateRequest requestDto, UUID productId) {
+        Product product = getProduct(productId);
+        product.update(requestDto);
+        return ProductResponse.fromEntity(product);
+    }
+
+    @Transactional
+    public void deleteProduct(UUID productId) {
+        Product product = getProduct(productId);
+        product.delete();
+    }
+
+    private Product getProduct(UUID productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_PRODUCT));
     }
 }

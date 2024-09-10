@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProductResponse {
 
     private UUID id;
-    private UUID companyId;
+    private CompanyResponse company;
     private UUID hubId;
     private String name;
     private int quantity;
@@ -23,7 +23,7 @@ public class ProductResponse {
     public static ProductResponse fromEntity(Product product) {
         return ProductResponse.builder()
             .id(product.getId())
-            .companyId(product.getCompany().getId())
+            .company(CompanyResponse.fromEntity(product.getCompany()))
             .hubId(product.getHubId())
             .name(product.getName())
             .quantity(product.getQuantity())

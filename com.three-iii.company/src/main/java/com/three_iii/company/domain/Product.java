@@ -1,6 +1,7 @@
 package com.three_iii.company.domain;
 
 import com.three_iii.company.application.dto.ProductCreateRequest;
+import com.three_iii.company.application.dto.ProductUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "p_product")
+@Where(clause = "is_delete = false")
 public class Product extends BaseEntity {
 
     @Id
@@ -42,11 +45,16 @@ public class Product extends BaseEntity {
     private int quantity;
 
     public static Product create(ProductCreateRequest requestDto, Company company) {
-        return Product.builder()
+        return com.three_iii.company.domain.Product.builder()
             .company(company)
             .hubId(requestDto.getHubId())
             .name(requestDto.getName())
             .quantity(requestDto.getQuantity())
             .build();
+    }
+
+    public void update(ProductUpdateRequest requestDto) {
+        this.name = requestDto.getName() == null ? this.name : requestDto.getName();
+        this.quantity = requestDto.getQuantity() == null ? this.quantity : requestDto.getQuantity();
     }
 }

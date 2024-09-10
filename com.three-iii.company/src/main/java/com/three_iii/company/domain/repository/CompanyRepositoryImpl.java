@@ -58,12 +58,12 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
                     sortOrder.isAscending() ? com.querydsl.core.types.Order.ASC
                         : com.querydsl.core.types.Order.DESC;
                 switch (sortOrder.getProperty()) {
-//                    case "createdAt":
-//                        orders.add(new OrderSpecifier<>(direction, company.createdAt));
-//                        break;
-//                    case "updatedAt":
-//                        orders.add(new OrderSpecifier<>(direction, company.updatedAt));
-//                        break;
+                    case "createdAt":
+                        orders.add(new OrderSpecifier<>(direction, company.createdAt));
+                        break;
+                    case "updatedAt":
+                        orders.add(new OrderSpecifier<>(direction, company.updatedAt));
+                        break;
                     default:
                         break;
                 }
