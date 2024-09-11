@@ -1,27 +1,35 @@
 server:
-  port: 19091  # ????? ???? ??? ?? ??
+  port: 19091
 
 spring:
   main:
-    web-application-type: reactive  # Spring ??????? ???? ? ???????? ???
+    web-application-type: reactive
   application:
     name: gateway
   cloud:
     gateway:
-      routes:  # Spring Cloud Gateway? ??? ??
-        - id: auth
-          uri: lb://auth
+      routes:
+        - id: user
+          uri: lb://user-service
           predicates:
             - Path=/api/auth/**
-        - id: service
-          uri: lb://service
+        - id: company
+          uri: lb://company
           predicates:
-            - Path=/api/**
+            - Path=/api/companies/**
       discovery:
         locator:
-          enabled: true  # ??? ?????? ?? ???? ???? ????? ??
+          enabled: true
+  security:
+    csrf:
+      enabled: false  # CSRF 비활성화
+
+jwt:
+  audience: b2b-client
+  expiration-minutes: 30
+  secret-key: local-three-iii-authenticate-secret-key
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/  # Eureka ??? URL? ??
+      defaultZone: http://localhost:19090/eureka/
