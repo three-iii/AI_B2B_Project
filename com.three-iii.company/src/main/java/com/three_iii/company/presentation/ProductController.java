@@ -37,6 +37,13 @@ public class ProductController {
         return Response.success(productService.createProduct(request.toDTO()));
     }
 
+    @PostMapping("/ai")
+    @Operation(summary = "AI를 활용한 상품 설명 생성", description = "AI를 활용하여 상품 설명을 생성한다. description에 AI에게 요청 할 질문을 넣어주세요")
+    public Response<ProductResponse> createProductByAi(
+        @RequestBody @Valid ProductCreateRequest request) {
+        return Response.success(productService.createProductByAi(request.toDTO()));
+    }
+
     @GetMapping("/{productId}")
     @Operation(summary = "상품 단건 조회", description = "상품을 단건 조회한다.")
     public Response<ProductResponse> findProduct(@PathVariable UUID productId) {
