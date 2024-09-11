@@ -42,7 +42,7 @@ public class JwtUtil {
             Jwts.builder()
                 .issuer(issuer)
                 .issuedAt(issuedDate)
-                .claim(ID, userId)
+                .claim(ID, userId.toString())
                 .claim(USERNAME, username)
                 .claim(ROLE, roleDescription)
                 .expiration(new Date(issuedDate.getTime() + TOKEN_TIME))

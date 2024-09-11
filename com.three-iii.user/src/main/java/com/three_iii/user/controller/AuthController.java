@@ -5,11 +5,12 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import com.three_iii.user.application.AuthService;
 import com.three_iii.user.application.dto.SignInRequest;
 import com.three_iii.user.application.dto.SignUpRequest;
+import com.three_iii.user.domain.UserPrincipal;
 import com.three_iii.user.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,10 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok().body("통과!");
+    public Response<String> test(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        System.out.println("userPrincipal.getId() = " + userPrincipal.getId());
+        System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
+        System.out.println("userPrincipal.getRole() = " + userPrincipal.getRole());
+        return Response.success("테스트 성공");
     }
 }

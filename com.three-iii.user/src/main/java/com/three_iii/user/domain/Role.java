@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-    MASTER_MANAGER("마스터 관리자"),
-    HUB_MANAGER("허브 관리자"),
-    COMPANY_MANAGER("업체 관리자"),
-    SHIPPER("배송 담당자"),
-    CUSTOMER("고객");
+    MASTER_MANAGER("MASTER_MANAGER"),
+    HUB_MANAGER("HUB_MANAGER"),
+    COMPANY_MANAGER("COMPANY_MANAGER"),
+    SHIPPER("SHIPPER"),
+    CUSTOMER("CUSTOMER");
 
     private final String description;
 

@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### 일반 사용자 로그인 API
-GET http://localhost:19091/api/auth/sign-in
+POST http://localhost:19091/api/auth/sign-in
 Content-Type: application/json
 
 {
@@ -37,4 +37,4 @@ Content-Type: application/json
 
 ### GW 테스트
 GET http://localhost:19091/api/auth/test
-Authorization: {{access_token}}
+Authorization: {{token}}
