@@ -51,7 +51,7 @@ public class ProductService {
     public ProductResponse createProductByAi(ProductDto request) {
         Company company = getCompany(request.getCompanyId());
 
-        String descriptionByAi = aiService.getCompletion(request.getDescription());
+        String descriptionByAi = aiService.getContents(request.getDescription());
         Product product = Product.create(
             company,
             request.getHubId(),

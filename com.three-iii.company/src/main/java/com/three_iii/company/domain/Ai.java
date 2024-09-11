@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "p_ai")
-public class Ai extends BaseEntity {
+public class Ai {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
