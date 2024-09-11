@@ -1,10 +1,10 @@
-package com.three_iii.company.controller;
+package com.three_iii.company.presentation;
 
-import com.three_iii.company.application.ProductService;
-import com.three_iii.company.application.dto.ProductCreateRequest;
-import com.three_iii.company.application.dto.ProductResponse;
-import com.three_iii.company.application.dto.ProductUpdateRequest;
+import com.three_iii.company.application.dtos.product.ProductResponse;
+import com.three_iii.company.application.service.ProductService;
 import com.three_iii.company.exception.Response;
+import com.three_iii.company.presentation.dtos.ProductCreateRequest;
+import com.three_iii.company.presentation.dtos.ProductUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,8 +33,8 @@ public class ProductController {
     @PostMapping
     @Operation(summary = "상품 생성", description = "상품을 생성한다.")
     public Response<ProductResponse> createProduct(
-        @RequestBody @Valid ProductCreateRequest requestDto) {
-        return Response.success(productService.createProduct(requestDto));
+        @RequestBody @Valid ProductCreateRequest request) {
+        return Response.success(productService.createProduct(request.toDTO()));
     }
 
     @GetMapping("/{productId}")
@@ -56,8 +56,8 @@ public class ProductController {
     @PatchMapping("/{productId}")
     @Operation(summary = "상품 수정", description = "상품을 수정한다.")
     public Response<ProductResponse> updateProduct(@PathVariable UUID productId,
-        @RequestBody ProductUpdateRequest requestDto) {
-        return Response.success(productService.updateProduct(requestDto, productId));
+        @RequestBody ProductUpdateRequest request) {
+        return Response.success(productService.updateProduct(request.toDTO(), productId));
     }
 
     @DeleteMapping("/{productId}")

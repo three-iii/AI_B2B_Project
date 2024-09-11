@@ -1,11 +1,11 @@
-package com.three_iii.company.application;
+package com.three_iii.company.application.service;
 
 import static com.three_iii.company.exception.ErrorCode.DUPLICATED_NAME;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_COMPANY;
 
-import com.three_iii.company.application.dto.CompanyCreateRequest;
-import com.three_iii.company.application.dto.CompanyResponse;
-import com.three_iii.company.application.dto.CompanyUpdateRequest;
+import com.three_iii.company.application.dtos.company.CompanyDto;
+import com.three_iii.company.application.dtos.company.CompanyResponse;
+import com.three_iii.company.application.dtos.company.CompanyUpdateDto;
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.exception.ApplicationException;
@@ -23,12 +23,12 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
 
     @Transactional
-    public CompanyResponse createCompany(CompanyCreateRequest requestDto) {
+    public CompanyResponse createCompany(CompanyDto request) {
         // 업체명 중복 검사
-        if (companyRepository.existsByName(requestDto.getName())) {
+        if (companyRepository.existsByName(request.getName())) {
             throw new ApplicationException(DUPLICATED_NAME);
         }
-        Company company = Company.create(requestDto);
+        Company company = Company.create(request);
         return CompanyResponse.fromEntity(companyRepository.save(company));
     }
 
@@ -53,10 +53,10 @@ public class CompanyService {
     }
 
     @Transactional
-    public CompanyResponse updateCompany(UUID companyId, CompanyUpdateRequest requestDto) {
+    public CompanyResponse updateCompany(UUID companyId, CompanyUpdateDto request) {
         Company company = companyRepository.findById(companyId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
-        company.update(requestDto);
+        company.update(request);
         return CompanyResponse.fromEntity(company);
     }
 }

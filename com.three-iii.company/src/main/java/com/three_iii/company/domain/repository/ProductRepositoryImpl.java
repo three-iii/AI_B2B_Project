@@ -8,7 +8,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.three_iii.company.application.dto.ProductResponse;
+import com.three_iii.company.application.dtos.product.ProductResponse;
 import com.three_iii.company.domain.Product;
 import java.util.ArrayList;
 import java.util.List;

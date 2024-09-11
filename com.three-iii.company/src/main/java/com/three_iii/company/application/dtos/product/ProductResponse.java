@@ -1,4 +1,4 @@
-package com.three_iii.company.application.dto;
+package com.three_iii.company.application.dtos.product;
 
 import com.three_iii.company.domain.Product;
 import java.util.UUID;
