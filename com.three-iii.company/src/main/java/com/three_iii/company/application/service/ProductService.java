@@ -1,12 +1,12 @@
-package com.three_iii.company.application;
+package com.three_iii.company.application.service;
 
 import static com.three_iii.company.exception.ErrorCode.DUPLICATED_NAME;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_COMPANY;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_PRODUCT;
 
-import com.three_iii.company.application.dto.ProductCreateRequest;
-import com.three_iii.company.application.dto.ProductResponse;
-import com.three_iii.company.application.dto.ProductUpdateRequest;
+import com.three_iii.company.application.dtos.product.ProductDto;
+import com.three_iii.company.application.dtos.product.ProductResponse;
+import com.three_iii.company.application.dtos.product.ProductUpdateDto;
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
@@ -27,17 +27,17 @@ public class ProductService {
     private final CompanyRepository companyRepository;
 
     @Transactional
-    public ProductResponse createProduct(ProductCreateRequest requestDto) {
+    public ProductResponse createProduct(ProductDto request) {
         // TODO 허브 검사
         // 업체 검사
-        Company company = getCompany(requestDto.getCompanyId());
+        Company company = getCompany(request.getCompanyId());
 
         // 상품명 중복 검사
-        if (productRepository.existsByNameAndCompany(requestDto.getName(), company)) {
+        if (productRepository.existsByNameAndCompany(request.getName(), company)) {
             throw new ApplicationException(DUPLICATED_NAME);
         }
 
-        Product product = Product.create(requestDto, company);
+        Product product = Product.create(request, company);
         return ProductResponse.fromEntity(productRepository.save(product));
     }
 
@@ -59,9 +59,9 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse updateProduct(ProductUpdateRequest requestDto, UUID productId) {
+    public ProductResponse updateProduct(ProductUpdateDto request, UUID productId) {
         Product product = getProduct(productId);
-        product.update(requestDto);
+        product.update(request);
         return ProductResponse.fromEntity(product);
     }
 

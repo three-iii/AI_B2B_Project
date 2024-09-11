@@ -1,7 +1,7 @@
 package com.three_iii.company.domain;
 
-import com.three_iii.company.application.dto.ProductCreateRequest;
-import com.three_iii.company.application.dto.ProductUpdateRequest;
+import com.three_iii.company.application.dtos.product.ProductDto;
+import com.three_iii.company.application.dtos.product.ProductUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,8 +44,8 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private int quantity;
 
-    public static Product create(ProductCreateRequest requestDto, Company company) {
-        return com.three_iii.company.domain.Product.builder()
+    public static Product create(ProductDto requestDto, Company company) {
+        return Product.builder()
             .company(company)
             .hubId(requestDto.getHubId())
             .name(requestDto.getName())
@@ -53,7 +53,7 @@ public class Product extends BaseEntity {
             .build();
     }
 
-    public void update(ProductUpdateRequest requestDto) {
+    public void update(ProductUpdateDto requestDto) {
         this.name = requestDto.getName() == null ? this.name : requestDto.getName();
         this.quantity = requestDto.getQuantity() == null ? this.quantity : requestDto.getQuantity();
     }

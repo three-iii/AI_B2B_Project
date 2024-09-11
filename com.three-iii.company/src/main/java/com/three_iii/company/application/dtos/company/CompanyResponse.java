@@ -1,4 +1,4 @@
-package com.three_iii.company.application.dto;
+package com.three_iii.company.application.dtos.company;
 
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.CompanyTypeEnum;
