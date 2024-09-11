@@ -16,12 +16,14 @@ public class ProductResponse {
 
     private UUID id;
     private String name;
+    private String description;
     private int quantity;
 
     public static ProductResponse fromEntity(Product product) {
         return ProductResponse.builder()
             .id(product.getId())
             .name(product.getName())
+            .description(product.getDescription())
             .quantity(product.getQuantity())
             .build();
     }

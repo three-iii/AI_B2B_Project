@@ -16,13 +16,16 @@ public class ProductDto {
     private UUID companyId;
     private UUID hubId;
     private String name;
+    private String description;
     private int quantity;
 
-    public static ProductDto create(UUID companyId, UUID hubId, String name, int quantity) {
+    public static ProductDto create(UUID companyId, UUID hubId, String name, String description,
+        int quantity) {
         return ProductDto.builder()
             .companyId(companyId)
             .hubId(hubId)
             .name(name)
+            .description(description)
             .quantity(quantity)
             .build();
     }

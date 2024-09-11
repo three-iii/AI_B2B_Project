@@ -18,11 +18,13 @@ public class ProductCreateRequest {
     UUID hubId;
     @NotNull
     String name;
+    String description;
     @NotNull
     int quantity;
 
     public ProductDto toDTO() {
-        return ProductDto.create(this.companyId, this.hubId, this.name, this.quantity);
+        return ProductDto.create(this.companyId, this.hubId, this.name, this.description,
+            this.quantity);
     }
 
 }

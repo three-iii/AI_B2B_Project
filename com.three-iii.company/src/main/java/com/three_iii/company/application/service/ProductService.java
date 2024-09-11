@@ -25,6 +25,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CompanyRepository companyRepository;
+    private final AiService aiService;
 
     @Transactional
     public ProductResponse createProduct(ProductDto request) {
@@ -37,7 +38,27 @@ public class ProductService {
             throw new ApplicationException(DUPLICATED_NAME);
         }
 
-        Product product = Product.create(request, company);
+        Product product = Product.create(
+            company,
+            request.getHubId(),
+            request.getName(),
+            request.getDescription(),
+            request.getQuantity());
+        return ProductResponse.fromEntity(productRepository.save(product));
+    }
+
+    @Transactional
+    public ProductResponse createProductByAi(ProductDto request) {
+        Company company = getCompany(request.getCompanyId());
+
+        String descriptionByAi = aiService.getContents(request.getDescription());
+        Product product = Product.create(
+            company,
+            request.getHubId(),
+            request.getName(),
+            descriptionByAi,
+            request.getQuantity());
+
         return ProductResponse.fromEntity(productRepository.save(product));
     }
 
@@ -80,4 +101,5 @@ public class ProductService {
         return productRepository.findById(productId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_PRODUCT));
     }
+
 }
