@@ -34,7 +34,17 @@ Content-Type: application/json
   client.global.set("token", response.headers.valueOf("Authorization"))
 %}
 
-
 ### GW 테스트
 GET http://localhost:19091/api/auth/test
 Authorization: {{token}}
+
+### company 생성 API
+POST http://localhost:19091/api/companies
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "name": "이름",
+  "type": "PRODUCTION_COMPANY",
+  "address": "주소"
+}
