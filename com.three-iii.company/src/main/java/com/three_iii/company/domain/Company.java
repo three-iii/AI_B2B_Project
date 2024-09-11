@@ -1,6 +1,7 @@
 package com.three_iii.company.domain;
 
-import com.three_iii.company.application.dto.CompanyUpdateRequest;
+import com.three_iii.company.application.dtos.company.CompanyDto;
+import com.three_iii.company.application.dtos.company.CompanyUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +20,8 @@ import org.hibernate.annotations.Where;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "p_company")
 @Where(clause = "is_delete = false")
@@ -45,7 +47,15 @@ public class Company extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
-    public void update(CompanyUpdateRequest requestDto) {
+    public static Company create(CompanyDto requestDto) {
+        return Company.builder()
+            .name(requestDto.getName())
+            .type(requestDto.getType())
+            .address(requestDto.getAddress())
+            .build();
+    }
+
+    public void update(CompanyUpdateDto requestDto) {
         this.name = requestDto.getName() == null ? this.name : requestDto.getName();
         this.type = requestDto.getType() == null ? this.type : requestDto.getType();
         this.address = requestDto.getAddress() == null ? this.address : requestDto.getAddress();
