@@ -37,5 +37,5 @@ logging:
 
 gemini:
   api:
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent
+    url: https://generativelanguage.googleapis.com
     key: ${GEMINI_KEY}
