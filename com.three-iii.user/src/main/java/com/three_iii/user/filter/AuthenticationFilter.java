@@ -32,7 +32,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (id != null && username != null && role != null) {
             UserPrincipal userPrincipal = UserPrincipal.of(Long.valueOf(id), username, role);
 
-            GrantedAuthority authority = new SimpleGrantedAuthority(userPrincipal.getRole());
+            GrantedAuthority authority = new SimpleGrantedAuthority(role);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userPrincipal, null, List.of(authority)
             );

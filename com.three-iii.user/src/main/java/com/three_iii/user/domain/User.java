@@ -46,4 +46,8 @@ public class User {
     public static User of(String username, String encodedPassword, Role role, String slackId) {
         return new User(username, encodedPassword, role, slackId);
     }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
