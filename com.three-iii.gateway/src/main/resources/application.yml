@@ -8,6 +8,35 @@ spring:
     name: gateway
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: true
+            allowedHeaders:
+              - x-requested-with
+              - Authorization
+              - content-type
+              - credential
+              - X-AUTH-TOKEN
+              - X-CSRF-TOKEN
+              - X-User-Name
+            exposedHeaders:
+              - x-requested-with
+              - Authorization
+              - content-type
+              - credential
+              - X-AUTH-TOKEN
+              - X-CSRF-TOKEN
+              - X-User-Name
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
       routes:
         - id: user
           uri: lb://user-service
@@ -16,7 +45,7 @@ spring:
         - id: company
           uri: lb://company
           predicates:
-            - Path=/api/companies/**
+            - Path=/api/companies/**, /api/products/**
       discovery:
         locator:
           enabled: true
@@ -33,3 +62,17 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    use-root-path: true
+    #    path: /swagger-ui.html
+    #    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /api/auth/v3/api-docs
+        name: auth
+      - url: /api/companies/v3/api-docs
+        name: company
+  api-docs:
+    enabled: true
