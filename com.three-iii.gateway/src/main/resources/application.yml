@@ -72,7 +72,13 @@ springdoc:
     urls:
       - url: /api/auth/v3/api-docs
         name: auth
+      - url: /api/hubs/v3/api-docs
+        name: hub
       - url: /api/companies/v3/api-docs
         name: company
+      - url: /api/orders/v3/api-docs
+        name: order
+      - url: /api/slack-messages/v3/api-docs
+        name: slack
   api-docs:
     enabled: true
