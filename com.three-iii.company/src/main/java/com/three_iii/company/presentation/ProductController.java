@@ -2,6 +2,7 @@ package com.three_iii.company.presentation;
 
 import com.three_iii.company.application.dtos.product.ProductResponse;
 import com.three_iii.company.application.service.ProductService;
+import com.three_iii.company.domain.UserPrincipal;
 import com.three_iii.company.exception.Response;
 import com.three_iii.company.presentation.dtos.ProductCreateRequest;
 import com.three_iii.company.presentation.dtos.ProductUpdateRequest;
@@ -12,6 +13,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,9 +35,12 @@ public class ProductController {
 
     @PostMapping
     @Operation(summary = "상품 생성", description = "상품을 생성한다.")
+    @PreAuthorize("hasAuthority('MASTER_MANAGER') or hasAuthority('HUB_MANAGER') or hasAuthority('COMPANY_MANAGER')")
     public Response<ProductResponse> createProduct(
-        @RequestBody @Valid ProductCreateRequest request) {
-        return Response.success(productService.createProduct(request.toDTO()));
+        @RequestBody @Valid ProductCreateRequest request,
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return Response.success(productService.createProduct(request.toDTO(), userPrincipal.getId(),
+            userPrincipal.getRole()));
     }
 
     @PostMapping("/ai")
@@ -62,15 +68,25 @@ public class ProductController {
 
     @PatchMapping("/{productId}")
     @Operation(summary = "상품 수정", description = "상품을 수정한다.")
-    public Response<ProductResponse> updateProduct(@PathVariable UUID productId,
-        @RequestBody ProductUpdateRequest request) {
-        return Response.success(productService.updateProduct(request.toDTO(), productId));
+    @PreAuthorize("hasAuthority('MASTER_MANAGER') or hasAuthority('HUB_MANAGER') or hasAuthority('COMPANY_MANAGER')")
+    public Response<ProductResponse> updateProduct(
+        @PathVariable UUID productId,
+        @RequestBody ProductUpdateRequest request,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        return Response.success(
+            productService.updateProduct(request.toDTO(), productId, userPrincipal.getId(),
+                userPrincipal.getRole()));
     }
 
     @DeleteMapping("/{productId}")
     @Operation(summary = "상품 삭제", description = "상품을 삭제한다.")
-    public Response<?> deleteProduct(@PathVariable UUID productId) {
-        productService.deleteProduct(productId);
+    @PreAuthorize("hasAuthority('MASTER_MANAGER') or hasAuthority('HUB_MANAGER') or hasAuthority('COMPANY_MANAGER')")
+    public Response<?> deleteProduct(
+        @PathVariable UUID productId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        productService.deleteProduct(productId, userPrincipal.getId(), userPrincipal.getRole());
         return Response.success("해당 상품이 삭제되었습니다.");
     }
 }

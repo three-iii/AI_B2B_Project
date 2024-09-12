@@ -16,12 +16,14 @@ import lombok.NoArgsConstructor;
 public class CompanyResponse {
 
     private UUID id;
+    private Long userId;
     private String name;
     private CompanyTypeEnum type;
     private String address;
 
     public static CompanyResponse fromEntity(Company company) {
         return CompanyResponse.builder()
+            .userId(company.getUserId())
             .id(company.getId())
             .name(company.getName())
             .type(company.getType())

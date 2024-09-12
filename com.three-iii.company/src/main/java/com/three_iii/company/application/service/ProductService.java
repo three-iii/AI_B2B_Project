@@ -1,5 +1,6 @@
 package com.three_iii.company.application.service;
 
+import static com.three_iii.company.exception.ErrorCode.ACCESS_DENIED;
 import static com.three_iii.company.exception.ErrorCode.DUPLICATED_NAME;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_COMPANY;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_PRODUCT;
@@ -12,6 +13,7 @@ import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,10 +30,17 @@ public class ProductService {
     private final AiService aiService;
 
     @Transactional
-    public ProductResponse createProduct(ProductDto request) {
+    public ProductResponse createProduct(ProductDto request, Long id, String role) {
         // TODO 허브 검사
         // 업체 검사
         Company company = getCompany(request.getCompanyId());
+
+        //TODO 허브 관리자: 자신의 허브에 소속된 상품만 관리 가능
+
+        // 허브 업체: 자신의 업체의 상품만 생성 및 수정 가능
+        if (role.equals("COMPANY_MANAGER") && !Objects.equals(company.getUserId(), id)) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
 
         // 상품명 중복 검사
         if (productRepository.existsByNameAndCompany(request.getName(), company)) {
@@ -80,15 +89,30 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse updateProduct(ProductUpdateDto request, UUID productId) {
+    public ProductResponse updateProduct(ProductUpdateDto request, UUID productId, Long id,
+        String role) {
         Product product = getProduct(productId);
+
+        // 허브 업체: 자신의 업체의 상품만 생성 및 수정 가능
+        if (role.equals("COMPANY_MANAGER") && !Objects.equals(product.getCompany().getUserId(),
+            id)) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
+
         product.update(request);
         return ProductResponse.fromEntity(product);
     }
 
     @Transactional
-    public void deleteProduct(UUID productId) {
+    public void deleteProduct(UUID productId, Long id, String role) {
         Product product = getProduct(productId);
+
+        // 허브 업체: 자신의 업체의 상품만 생성 및 수정 가능
+        if (role.equals("COMPANY_MANAGER") && !Objects.equals(product.getCompany().getUserId(),
+            id)) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
+
         product.delete();
     }
 

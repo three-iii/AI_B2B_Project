@@ -31,11 +31,12 @@ public class Company extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
+    private Long userId;
+
     //TODO 안지연
     // hub 매핑
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn
-//    private Hub hub;
+    private UUID hubId;
 
     @Column(nullable = false)
     private String name;
@@ -47,8 +48,9 @@ public class Company extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
-    public static Company create(CompanyDto requestDto) {
+    public static Company create(CompanyDto requestDto, Long userId) {
         return Company.builder()
+            .userId(userId)
             .name(requestDto.getName())
             .type(requestDto.getType())
             .address(requestDto.getAddress())
