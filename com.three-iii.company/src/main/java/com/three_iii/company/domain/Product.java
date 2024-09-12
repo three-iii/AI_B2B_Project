@@ -1,6 +1,5 @@
 package com.three_iii.company.domain;
 
-import com.three_iii.company.application.dtos.product.ProductDto;
 import com.three_iii.company.application.dtos.product.ProductUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,14 +41,19 @@ public class Product extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
     private int quantity;
 
-    public static Product create(ProductDto requestDto, Company company) {
+    public static Product create(Company company, UUID hubId, String name, String description,
+        Integer quantity) {
         return Product.builder()
             .company(company)
-            .hubId(requestDto.getHubId())
-            .name(requestDto.getName())
-            .quantity(requestDto.getQuantity())
+            .hubId(hubId)
+            .name(name)
+            .description(description)
+            .quantity(quantity)
             .build();
     }
 
