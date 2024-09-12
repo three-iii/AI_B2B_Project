@@ -15,9 +15,9 @@ POST http://localhost:19091/api/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "master1",
+  "username": "master2",
   "password": "password",
-  "slackId": "master1",
+  "slackId": "master2",
   "master": true,
   "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III1"
 }
