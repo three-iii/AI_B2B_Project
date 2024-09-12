@@ -7,7 +7,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.three_iii.company.application.dto.CompanyFindResponse;
+import com.three_iii.company.application.dtos.company.CompanyResponse;
 import com.three_iii.company.domain.Company;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<CompanyFindResponse> searchCompany(String keyword, Pageable pageable) {
+    public Page<CompanyResponse> searchCompany(String keyword, Pageable pageable) {
         List<OrderSpecifier<?>> orders = getAllOrderSpecifiers(pageable);
 
         QueryResults<Company> results = queryFactory
@@ -37,8 +37,8 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
             .limit(pageable.getPageSize())
             .fetchResults();
 
-        List<CompanyFindResponse> content = results.getResults().stream()
-            .map(CompanyFindResponse::fromEntity)
+        List<CompanyResponse> content = results.getResults().stream()
+            .map(CompanyResponse::fromEntity)
             .collect(Collectors.toList());
         long total = results.getTotal();
 
@@ -58,12 +58,12 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
                     sortOrder.isAscending() ? com.querydsl.core.types.Order.ASC
                         : com.querydsl.core.types.Order.DESC;
                 switch (sortOrder.getProperty()) {
-//                    case "createdAt":
-//                        orders.add(new OrderSpecifier<>(direction, company.createdAt));
-//                        break;
-//                    case "updatedAt":
-//                        orders.add(new OrderSpecifier<>(direction, company.updatedAt));
-//                        break;
+                    case "createdAt":
+                        orders.add(new OrderSpecifier<>(direction, company.createdAt));
+                        break;
+                    case "updatedAt":
+                        orders.add(new OrderSpecifier<>(direction, company.updatedAt));
+                        break;
                     default:
                         break;
                 }

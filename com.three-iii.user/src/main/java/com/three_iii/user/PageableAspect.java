@@ -15,7 +15,7 @@ public class PageableAspect {
     private static final int DEFAULT_PAGE_SIZE = 10;
     private static final int[] ALLOWED_PAGE_SIZES = {10, 30, 50};
 
-    @Around("execution(* com.three_iii.service..*(.., org.springframework.data.domain.Pageable, ..))")
+    @Around("execution(* com.three_iii.user..*(.., org.springframework.data.domain.Pageable, ..))")
     public Object validatePageable(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         for (int i = 0; i < args.length; i++) {
