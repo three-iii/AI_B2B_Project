@@ -86,7 +86,8 @@ public class ProductController {
         @PathVariable UUID productId,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        productService.deleteProduct(productId, userPrincipal.getId(), userPrincipal.getRole());
+        productService.deleteProduct(productId, userPrincipal.getId(), userPrincipal.getRole(),
+            userPrincipal.getUsername());
         return Response.success("해당 상품이 삭제되었습니다.");
     }
 }

@@ -76,8 +76,9 @@ public class CompanyController {
     @DeleteMapping("/{companyId}")
     @Operation(summary = "업체 삭제", description = "업체를 삭제한다.")
     @PreAuthorize("hasAuthority('MASTER_MANAGER') or hasAuthority('HUB_MANAGER')")
-    public Response<?> deleteCompany(@PathVariable UUID companyId) {
-        companyService.deleteCompany(companyId);
+    public Response<?> deleteCompany(@PathVariable UUID companyId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        companyService.deleteCompany(companyId, userPrincipal.getUsername());
         return Response.success("해당 업체가 삭제되었습니다.");
     }
 }

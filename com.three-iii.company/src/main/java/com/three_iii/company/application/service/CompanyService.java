@@ -48,10 +48,10 @@ public class CompanyService {
     }
 
     @Transactional
-    public void deleteCompany(UUID companyId) {
+    public void deleteCompany(UUID companyId, String username) {
         Company company = companyRepository.findById(companyId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
-        company.delete();
+        company.delete(username);
     }
 
     @Transactional

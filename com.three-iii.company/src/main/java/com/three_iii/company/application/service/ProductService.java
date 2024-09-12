@@ -104,7 +104,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(UUID productId, Long id, String role) {
+    public void deleteProduct(UUID productId, Long id, String role, String username) {
         Product product = getProduct(productId);
 
         // 허브 업체: 자신의 업체의 상품만 생성 및 수정 가능
@@ -113,7 +113,7 @@ public class ProductService {
             throw new ApplicationException(ACCESS_DENIED);
         }
 
-        product.delete();
+        product.delete(username);
     }
 
     private Company getCompany(UUID companyId) {
