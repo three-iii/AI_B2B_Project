@@ -1,26 +1,32 @@
 package com.three_iii.slack;
 
 import com.slack.api.methods.SlackApiException;
+import com.three_iii.slack.application.service.AiService;
 import com.three_iii.slack.application.service.SlackService;
 import com.three_iii.slack.application.service.WeatherService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
 
     private final SlackService slackService;
     private final WeatherService weatherService;
+    private final AiService aiService;
 
     // 업체 배송 담담자에게 날씨와 배송 정보 알림 처리
     // 배송 테이블의 출발 업체 배송자 id에게 알림처리
-    //
     @Scheduled(cron = " 0 0/1 * * * *")
     //@Scheduled(cron = " 0 0 6 * * *") //매일 6시에 실행
     public void companyShipperSchedule() throws SlackApiException, IOException {
+        String weatherInfo = weatherService.getWeather();
+        log.info("날씨 {}", weatherInfo);
+
         //slackService.createSlackMessage(new SlackDto("U07MM562S56", "메시지 테스트 입니다"));
     }
 

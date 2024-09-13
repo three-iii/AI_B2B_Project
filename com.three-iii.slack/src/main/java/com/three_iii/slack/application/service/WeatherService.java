@@ -2,7 +2,6 @@ package com.three_iii.slack.application.service;
 
 import com.three_iii.slack.application.dtos.WeatherResponse;
 import com.three_iii.slack.application.dtos.WeatherResponse.Item;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,20 +22,19 @@ public class WeatherService {
         return weatherInterface.getCompletion(serviceKey);
     }
 
-    public List<WeatherResponse.Item> getWeather() {
+    public String getWeather() {
         List<Item> items = getWeatherDetail().getResponse().getBody().getItems().getItem();
 
-        List<WeatherResponse.Item> list = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         for (WeatherResponse.Item item : items) {
-            if (item.getCategory().equals("TMX") || //최고 온도
-                item.getCategory().equals("TMN") || //최저 온도
-                item.getCategory().equals("POP")    //강수 확률
-            ) {
-                list.add(item);
+            if (item.getCategory().equals("TMN")) {
+                sb.append("최저기은:").append(item.getFcstValue()).append(" ");
+            }
+            if (item.getCategory().equals("TMX")) {
+                sb.append("최고기은:").append(item.getFcstValue());
             }
         }
-
-        return list;
+        return sb.toString();
     }
 
 }
