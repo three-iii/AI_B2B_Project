@@ -6,7 +6,10 @@ import com.three_iii.hub.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +27,12 @@ public class HubController {
     @Operation(summary = "허브 생성", description = "허브를 생성한다.")
     public Response<HubResponse> createHub(@RequestBody @Valid HubCreateRequest request) {
         return Response.success(hubService.createHub(request.toDTO()));
+    }
+
+    @DeleteMapping("/{hubId}")
+    @Operation(summary = "허브 삭제", description = "허브를 삭제한다.")
+    public Response<?> deleteHub(@PathVariable UUID hubId) {
+        hubService.deleteHub(hubId);
+        return Response.success("해당 허브가 삭제되었습니다");
     }
 }
