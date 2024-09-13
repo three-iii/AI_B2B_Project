@@ -10,6 +10,8 @@ import com.three_iii.hub.domain.repository.HubRepository;
 import com.three_iii.hub.exception.ApplicationException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class HubService {
         return HubResponse.fromEntity(hubRepository.save(hub));
     }
 
+
     @Transactional
     public void deleteHub(UUID hubId) {
         Hub hub = hubRepository.findById(hubId)
@@ -38,5 +41,10 @@ public class HubService {
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
         hub.update(request);
         return HubResponse.fromEntity(hub);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<HubResponse> findAllHub(String keyword, Pageable pageable) {
+        return hubRepository.searchHub(keyword, pageable);
     }
 }
