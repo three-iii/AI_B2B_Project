@@ -41,6 +41,12 @@ public class HubController {
         return Response.success(hubService.findAllHub(keyword, pageable));
     }
 
+    @GetMapping("/{hubId}")
+    @Operation(summary = "허브 단건 조회", description = "허브를 단건 조회한다.")
+    public Response<HubResponse> findHub(@PathVariable UUID hubId) {
+        return Response.success(hubService.findHub(hubId));
+    }
+
     @PatchMapping("/{companyId}")
     @Operation(summary = "허브 수정", description = "허브를 수정한다.")
     public Response<HubResponse> updateCompany(@PathVariable UUID companyId,

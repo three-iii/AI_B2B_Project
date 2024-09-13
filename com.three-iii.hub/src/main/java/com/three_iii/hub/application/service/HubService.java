@@ -27,6 +27,17 @@ public class HubService {
         return HubResponse.fromEntity(hubRepository.save(hub));
     }
 
+    @Transactional(readOnly = true)
+    public Page<HubResponse> findAllHub(String keyword, Pageable pageable) {
+        return hubRepository.searchHub(keyword, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public HubResponse findHub(UUID hubId) {
+        Hub hub = hubRepository.findById(hubId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
+        return HubResponse.fromEntity(hub);
+    }
 
     @Transactional
     public void deleteHub(UUID hubId) {
@@ -41,10 +52,5 @@ public class HubService {
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
         hub.update(request);
         return HubResponse.fromEntity(hub);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<HubResponse> findAllHub(String keyword, Pageable pageable) {
-        return hubRepository.searchHub(keyword, pageable);
     }
 }
