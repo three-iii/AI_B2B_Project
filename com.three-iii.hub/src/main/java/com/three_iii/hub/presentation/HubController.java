@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,13 @@ public class HubController {
     @Operation(summary = "허브 생성", description = "허브를 생성한다.")
     public Response<HubResponse> createHub(@RequestBody @Valid HubCreateRequest request) {
         return Response.success(hubService.createHub(request.toDTO()));
+    }
+
+    @PatchMapping("/{companyId}")
+    @Operation(summary = "허브 수정", description = "허브를 수정한다.")
+    public Response<HubResponse> updateCompany(@PathVariable UUID companyId,
+        @RequestBody HubUpdateRequest request) {
+        return Response.success(hubService.updateHub(companyId, request.toDTO()));
     }
 
     @DeleteMapping("/{hubId}")

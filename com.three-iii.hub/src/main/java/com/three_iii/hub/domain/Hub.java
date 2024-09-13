@@ -1,6 +1,7 @@
 package com.three_iii.hub.domain;
 
 import com.three_iii.hub.application.dtos.HubDto;
+import com.three_iii.hub.application.dtos.HubUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,5 +52,15 @@ public class Hub extends BaseEntity {
             .longitude(requestDto.getLongitude())
             .phone_number(requestDto.getPhone_number())
             .build();
+    }
+
+    public void update(HubUpdateDto requestDto) {
+        this.name = requestDto.getName() == null ? this.name : requestDto.getName();
+        this.address = requestDto.getAddress() == null ? this.address : requestDto.getAddress();
+        this.latitude = requestDto.getLatitude() == null ? this.latitude : requestDto.getLatitude();
+        this.longitude =
+            requestDto.getLongitude() == null ? this.longitude : requestDto.getLongitude();
+        this.phone_number =
+            requestDto.getPhone_number() == null ? this.phone_number : requestDto.getPhone_number();
     }
 }

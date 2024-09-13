@@ -4,6 +4,7 @@ import static com.three_iii.hub.exception.ErrorCode.NOT_FOUND_HUB;
 
 import com.three_iii.hub.application.dtos.HubDto;
 import com.three_iii.hub.application.dtos.HubResponse;
+import com.three_iii.hub.application.dtos.HubUpdateDto;
 import com.three_iii.hub.domain.Hub;
 import com.three_iii.hub.domain.repository.HubRepository;
 import com.three_iii.hub.exception.ApplicationException;
@@ -31,4 +32,11 @@ public class HubService {
         hub.delete();
     }
 
+    @Transactional
+    public HubResponse updateHub(UUID hubId, HubUpdateDto request) {
+        Hub hub = hubRepository.findById(hubId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
+        hub.update(request);
+        return HubResponse.fromEntity(hub);
+    }
 }
