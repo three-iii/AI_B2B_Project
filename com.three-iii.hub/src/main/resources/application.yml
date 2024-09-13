@@ -16,6 +16,10 @@ spring:
         show_sql: true
         use_sql_comments: true
         highlight_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never #?? ????? always
 
 server:
   port: 19093
