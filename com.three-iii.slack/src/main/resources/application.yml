@@ -1,6 +1,6 @@
 spring:
   application:
-    name: company
+    name: slack
   datasource:
     url: jdbc:postgresql://localhost:5432/b2b
     username: postgres
@@ -18,7 +18,7 @@ spring:
         highlight_sql: true
 
 server:
-  port: 19094
+  port: 19096
   swagger:
     host: localhost
 
@@ -35,18 +35,6 @@ logging:
           jdbc:
             bind: trace
 
-gemini:
-  api:
-    url: https://generativelanguage.googleapis.com
-    key: ${GEMINI_KEY}
-
-springdoc:
-  api-docs:
-    path: /api/companies/v3/api-docs
-  swagger-ui:
-    path: /api/companies/swagger-ui.html
-
-#openapi:
-#  service:
-#    # API Gateway 포트
-#    url: http://localhost:19091
+slack:
+  token: ${SLACK_TOKEN}
+  id: ${SLACK_CHANNEL_ID}

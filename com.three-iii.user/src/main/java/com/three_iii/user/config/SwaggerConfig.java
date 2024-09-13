@@ -1,29 +1,57 @@
 package com.three_iii.user.config;
 
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.ArrayList;
+import java.util.List;
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@OpenAPIDefinition(
+    info = @Info(title = "Auth API 명세서",
+        description = "Auth API 명세서",
+        version = "v1"))
 @Configuration
-@SecurityScheme(
-    name = "bearerAuth",
-    type = SecuritySchemeType.HTTP,
-    bearerFormat = "JWT",
-    scheme = "bearer"
-)
 public class SwaggerConfig {
 
+    @Value("${server.port}")
+    String serverPort;
+
     @Bean
-    public OpenAPI customizeOpenAPI() {
+    public GroupedOpenApi publicAPI() {
+        return GroupedOpenApi.builder()
+            .group("com.three-iii.user")
+            .pathsToMatch("/**")
+            .build();
+    }
 
-        Info info = new Info()
-            .title("AI_B2B_Project")
-            .description("✨ 대규모 AI 시스템 설계 프로젝트 ✨");
-
+    @Bean
+    public OpenAPI customOpenAPI() {
+        List<Server> serverList = new ArrayList<>();
+        Server server = new Server()
+            .url("http://localhost" + ":" + serverPort)
+            .description("Server");
+        Server gatewayServer = new Server()
+            .url("http://localhost" + ":" + 19091)
+            .description("Gateway Server");
+        serverList.add(gatewayServer);
+        serverList.add(server);
         return new OpenAPI()
-            .info(info);
+            .servers(serverList)
+            .components(new Components()
+                .addSecuritySchemes("JWT-Token", new SecurityScheme()
+                    .type(SecurityScheme.Type.HTTP)
+                    .scheme("bearer")
+                    .bearerFormat("JWT")
+                    .in(SecurityScheme.In.HEADER)
+                    .name("Authorization")))
+            .addSecurityItem(new SecurityRequirement().addList("JWT-Token"));
     }
 }
