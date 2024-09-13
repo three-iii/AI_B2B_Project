@@ -2,6 +2,7 @@ package com.three_iii.slack;
 
 import com.slack.api.methods.SlackApiException;
 import com.three_iii.slack.application.service.SlackService;
+import com.three_iii.slack.application.service.WeatherService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class ScheduleService {
 
     private final SlackService slackService;
+    private final WeatherService weatherService;
 
     // 업체 배송 담담자에게 날씨와 배송 정보 알림 처리
     // 배송 테이블의 출발 업체 배송자 id에게 알림처리

@@ -2,12 +2,13 @@ package com.three_iii.slack.presentation;
 
 import com.slack.api.methods.SlackApiException;
 import com.three_iii.slack.application.dtos.SlackResponse;
-import com.three_iii.slack.application.dtos.WeatherResponse;
+import com.three_iii.slack.application.dtos.WeatherResponse.Item;
 import com.three_iii.slack.application.service.SlackService;
 import com.three_iii.slack.application.service.WeatherService;
 import com.three_iii.slack.exception.Response;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class SlackController {
     }
 
     @GetMapping
-    public WeatherResponse getWeather() {
+    public List<Item> getWeather() {
         return weatherService.getWeather();
     }
 }
