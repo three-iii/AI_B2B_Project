@@ -1,6 +1,6 @@
 package com.three_iii.slack.presentation;
 
-import com.three_iii.slack.application.SlackDto;
+import com.three_iii.slack.application.dtos.SlackDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,10 +1,10 @@
 package com.three_iii.slack.presentation;
 
 import com.slack.api.methods.SlackApiException;
-import com.three_iii.slack.application.SlackResponse;
-import com.three_iii.slack.application.SlackService;
-import com.three_iii.slack.application.WeatherResponse;
-import com.three_iii.slack.application.WeatherService;
+import com.three_iii.slack.application.dtos.SlackResponse;
+import com.three_iii.slack.application.dtos.WeatherResponse;
+import com.three_iii.slack.application.service.SlackService;
+import com.three_iii.slack.application.service.WeatherService;
 import com.three_iii.slack.exception.Response;
 import jakarta.validation.Valid;
 import java.io.IOException;

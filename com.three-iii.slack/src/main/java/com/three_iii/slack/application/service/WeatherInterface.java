@@ -1,5 +1,6 @@
-package com.three_iii.slack.application;
+package com.three_iii.slack.application.service;
 
+import com.three_iii.slack.application.dtos.WeatherResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;

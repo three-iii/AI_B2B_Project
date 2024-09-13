@@ -1,7 +1,7 @@
 package com.three_iii.slack;
 
 import com.slack.api.methods.SlackApiException;
-import com.three_iii.slack.application.SlackService;
+import com.three_iii.slack.application.service.SlackService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

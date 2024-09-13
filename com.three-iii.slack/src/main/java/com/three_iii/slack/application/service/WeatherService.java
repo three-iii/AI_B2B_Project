@@ -1,5 +1,6 @@
-package com.three_iii.slack.application;
+package com.three_iii.slack.application.service;
 
+import com.three_iii.slack.application.dtos.WeatherResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

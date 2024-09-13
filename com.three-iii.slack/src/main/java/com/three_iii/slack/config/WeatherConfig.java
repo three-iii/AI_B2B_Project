@@ -1,6 +1,6 @@
 package com.three_iii.slack.config;
 
-import com.three_iii.slack.application.WeatherInterface;
+import com.three_iii.slack.application.service.WeatherInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
