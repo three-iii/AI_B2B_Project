@@ -4,7 +4,11 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "userId": "2",
+  "userId": "3",
   "hubId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
   "shipperType": "HUB_SHIPPER"
 }
+
+### shipper 전체조회 API
+GET http://localhost:19091/api/shippers
+Authorization: {{token}}
