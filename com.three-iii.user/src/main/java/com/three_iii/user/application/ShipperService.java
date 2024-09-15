@@ -1,5 +1,4 @@
 package com.three_iii.user.application;
-
 import com.three_iii.user.application.dto.ShipperDto;
 import com.three_iii.user.domain.Role;
 import com.three_iii.user.domain.Shipper;
@@ -46,9 +45,5 @@ public class ShipperService {
         // User Role 변경
         user.updateRole(Role.valueOf("SHIPPER"));
         return shipperRepository.save(shipper).getId();
-    }
-
-    private void validate() {
-
     }
 }

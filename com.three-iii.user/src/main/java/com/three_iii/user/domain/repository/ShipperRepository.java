@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShipperRepository extends JpaRepository<Shipper, UUID> {
-
+  
     boolean existsByUser(User user);
 }
