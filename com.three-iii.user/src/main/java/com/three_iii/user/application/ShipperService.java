@@ -1,15 +1,17 @@
 package com.three_iii.user.application;
 
-import com.three_iii.user.application.dto.ShipperDto;
 import com.three_iii.user.domain.Role;
 import com.three_iii.user.domain.Shipper;
 import com.three_iii.user.domain.ShipperType;
 import com.three_iii.user.domain.User;
+import com.three_iii.user.domain.UserPrincipal;
 import com.three_iii.user.domain.repository.ShipperRepository;
 import com.three_iii.user.domain.repository.UserRepository;
 import com.three_iii.user.exception.ErrorCode;
 import com.three_iii.user.exception.UserException;
+import com.three_iii.user.presentation.dtos.ShipperCreateRequest;
 import com.three_iii.user.presentation.dtos.ShipperReadResponse;
+import com.three_iii.user.presentation.dtos.ShipperUpdateRequest;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,24 +29,22 @@ public class ShipperService {
     private final String SHIPPER_ROLE_NAME = "SHIPPER";
 
     @Transactional
-    public UUID create(ShipperDto dto) {
-        // User 존재 확인
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(
+    public UUID create(ShipperCreateRequest request) {
+
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
             () -> new UserException(ErrorCode.NOT_FOUND_USER)
         );
 
-        // 중복 없는지 확인
         if (shipperRepository.existsByUser(user)) {
             throw new UserException(ErrorCode.DUPLICATE_SHIPPER);
         }
 
         // TODO Hub 존재 확인 - FeignClient 호출
 
-        // 생성
         Shipper shipper = Shipper.of(
-            ShipperType.valueOf(dto.getShipperType()),
+            ShipperType.valueOf(request.getShipperType()),
             user,
-            UUID.fromString(dto.getHubId())
+            UUID.fromString(request.getHubId())
         );
 
         // User Role 변경
@@ -72,5 +72,31 @@ public class ShipperService {
 //            response.updateHubName(hubNames.get(response.getHubId())));
 
         return responses;
+    }
+
+    @Transactional
+    public String update(UUID shipperId, ShipperUpdateRequest request) {
+        Shipper shipper = findShipperById(shipperId);
+
+        // TODO Hub 존재 확인 - FeignClient 호출
+
+        shipper.update(request);
+        return shipper.getId().toString();
+    }
+
+    @Transactional
+    public void delete(UUID shipperId, UserPrincipal deleter) {
+        if (Role.valueOf(deleter.getRole()) == Role.HUB_MANAGER) {
+            // TODO 자신의 허브 배송담당자를 삭제하는 허브 관리자인지 확인
+        }
+
+        Shipper shipper = findShipperById(shipperId);
+        shipper.delete();
+    }
+
+    private Shipper findShipperById(UUID shipperId) {
+        return shipperRepository.findById(shipperId).orElseThrow(
+            () -> new UserException(ErrorCode.NOT_FOUND_SHIPPER)
+        );
     }
 }
