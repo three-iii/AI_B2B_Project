@@ -1,4 +1,4 @@
-package com.three_iii.user.controller;
+package com.three_iii.user.presentation;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 

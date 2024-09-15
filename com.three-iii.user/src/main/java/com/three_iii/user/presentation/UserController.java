@@ -1,4 +1,4 @@
-package com.three_iii.user.controller;
+package com.three_iii.user.presentation;
 
 import com.three_iii.user.application.AuthService;
 import lombok.RequiredArgsConstructor;
