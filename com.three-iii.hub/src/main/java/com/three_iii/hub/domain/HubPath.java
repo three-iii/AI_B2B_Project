@@ -1,0 +1,45 @@
+package com.three_iii.hub.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
+
+@Getter
+@NoArgsConstructor
+@Builder(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "p_hub_path")
+@Where(clause = "is_delete = false")
+public class HubPath extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @OneToOne
+    @JoinColumn(name = "departure_id")
+    private Hub departure_id;
+
+    @OneToOne
+    @JoinColumn(name = "arrivals_id")
+    private Hub arrivals_id;
+
+    @Column(nullable = false)
+    private String name; //이동 경로 전시명
+
+    @Column(nullable = false)
+    private String time_required;
+}
