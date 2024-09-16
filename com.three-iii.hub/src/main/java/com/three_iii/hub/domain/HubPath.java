@@ -31,15 +31,25 @@ public class HubPath extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "departure_id")
-    private Hub departure_id;
+    private Hub departureId;
 
     @OneToOne
     @JoinColumn(name = "arrivals_id")
-    private Hub arrivals_id;
+    private Hub arrivalsId;
 
     @Column(nullable = false)
     private String name; //이동 경로 전시명
 
     @Column(nullable = false)
-    private String time_required;
+    private String timeRequired;
+
+    public static HubPath create(Hub departureId, Hub arrivalsId, String name,
+        String timeRequired) {
+        return HubPath.builder()
+            .departureId(departureId)
+            .arrivalsId(arrivalsId)
+            .name(name)
+            .timeRequired(timeRequired)
+            .build();
+    }
 }
