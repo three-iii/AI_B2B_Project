@@ -10,7 +10,7 @@ import com.three_iii.user.application.dto.SignUpRequest;
 import com.three_iii.user.domain.Role;
 import com.three_iii.user.domain.User;
 import com.three_iii.user.domain.repository.UserRepository;
-import com.three_iii.user.exception.ApplicationException;
+import com.three_iii.user.exception.UserException;
 import com.three_iii.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +34,7 @@ public class AuthService {
         Role role = Role.CUSTOMER;
         if (signUpRequest.isMaster()) {
             if (!MASTER_TOKEN.equals(signUpRequest.getMasterToken())) {
-                throw new ApplicationException(ACCESS_DENIED);
+                throw new UserException(ACCESS_DENIED);
             }
             role = Role.MASTER_MANAGER;
         }
@@ -56,7 +56,7 @@ public class AuthService {
 
     private User verifyUser(SignInRequest signInRequest) {
         User user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(
-            () -> new ApplicationException(BAD_CREDENTIALS)
+            () -> new UserException(BAD_CREDENTIALS)
         );
         checkPassword(user, signInRequest.getPassword());
         return user;
@@ -65,7 +65,7 @@ public class AuthService {
 
     private void checkPassword(User user, String password) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new ApplicationException(BAD_CREDENTIALS);
+            throw new UserException(BAD_CREDENTIALS);
         }
     }
 
@@ -76,13 +76,13 @@ public class AuthService {
 
     private void validateDuplicateUsername(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new ApplicationException(DUPLICATE_USERNAME);
+            throw new UserException(DUPLICATE_USERNAME);
         }
     }
 
     private void validateDuplicateSlackId(String slackId) {
         if (userRepository.existsBySlackId(slackId)) {
-            throw new ApplicationException(DUPLICATE_SLACK_ID);
+            throw new UserException(DUPLICATE_SLACK_ID);
         }
     }
 
