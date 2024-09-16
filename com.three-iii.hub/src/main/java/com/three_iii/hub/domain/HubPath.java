@@ -1,6 +1,7 @@
 package com.three_iii.hub.domain;
 
 import com.three_iii.hub.application.dtos.HubPathUpdateDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

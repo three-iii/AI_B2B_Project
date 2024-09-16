@@ -19,6 +19,7 @@ public class HubDto {
     private String phone_number;
 
     public static HubDto create(String name, String address, Double latitude, Double longitude,
+
         String phone_number) {
         return HubDto.builder()
             .name(name)
