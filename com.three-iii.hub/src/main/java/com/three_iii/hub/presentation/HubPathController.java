@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,5 +50,13 @@ public class HubPathController {
     @Operation(summary = "허브 간 이동정보 단건 조회", description = "허브 간 이동정보를 단건 조회한다.")
     public Response<HubPathResponse> findHubPath(@PathVariable UUID hubPathId) {
         return Response.success(hubPathService.findHubPath(hubPathId));
+    }
+
+    @PatchMapping("/{hubPathId}")
+    @Operation(summary = "허브 수정", description = "허브를 수정한다.")
+    @PreAuthorize("hasAuthority('MASTER_MANAGER')")
+    public Response<HubPathResponse> updateHubPath(@PathVariable UUID hubPathId,
+        @RequestBody HubPathUpdateRequest request) {
+        return Response.success(hubPathService.updateHubPath(hubPathId, request.toDTO()));
     }
 }

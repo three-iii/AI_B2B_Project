@@ -1,5 +1,6 @@
 package com.three_iii.hub.domain;
 
+import com.three_iii.hub.application.dtos.HubPathUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,5 +52,13 @@ public class HubPath extends BaseEntity {
             .name(name)
             .timeRequired(timeRequired)
             .build();
+    }
+
+    public void update(Hub departureId, Hub arrivalsId, HubPathUpdateDto requestDto) {
+        this.departureId = departureId == null ? this.departureId : departureId;
+        this.arrivalsId = arrivalsId == null ? this.arrivalsId : arrivalsId;
+        this.name = requestDto.getName() == null ? this.name : requestDto.getName();
+        this.timeRequired =
+            requestDto.getTimeRequired() == null ? this.timeRequired : requestDto.getTimeRequired();
     }
 }

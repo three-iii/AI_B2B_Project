@@ -5,6 +5,7 @@ import static com.three_iii.hub.exception.ErrorCode.NOT_FOUND_HUBPATH;
 
 import com.three_iii.hub.application.dtos.HubPathDto;
 import com.three_iii.hub.application.dtos.HubPathResponse;
+import com.three_iii.hub.application.dtos.HubPathUpdateDto;
 import com.three_iii.hub.domain.Hub;
 import com.three_iii.hub.domain.HubPath;
 import com.three_iii.hub.domain.repository.HubPathRepository;
@@ -46,6 +47,30 @@ public class HubPathService {
     public HubPathResponse findHubPath(UUID hubPathId) {
         HubPath hubPath = hubPathRepository.findById(hubPathId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));
+        return HubPathResponse.fromEntity(hubPath);
+    }
+
+    @Transactional
+    public HubPathResponse updateHubPath(UUID hubPathId, HubPathUpdateDto request) {
+        HubPath hubPath = hubPathRepository.findById(hubPathId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));
+
+        // 출발 허브
+        Hub departurehub = null;
+        if (request.getDepartureId() != null) {
+            departurehub = hubRepository.findById(request.getDepartureId())
+                .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
+
+        }
+
+        // 도착 허브
+        Hub arrivalsHub = null;
+        if (request.getArrivalsId() != null) {
+            arrivalsHub = hubRepository.findById(request.getArrivalsId())
+                .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
+        }
+
+        hubPath.update(departurehub, arrivalsHub, request);
         return HubPathResponse.fromEntity(hubPath);
     }
 }
