@@ -42,8 +42,9 @@ public abstract class BaseEntity {
 
     private String deletedBy;
 
-    public void delete() {
+    public void delete(String username) {
         this.is_delete = true;
+        this.deletedBy = username;
         this.deletedAt = LocalDateTime.now();
     }
 }

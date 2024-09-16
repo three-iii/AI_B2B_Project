@@ -1,0 +1,10 @@
+### shipper 생성 API
+POST http://localhost:19091/api/shippers
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "userId": "2",
+  "hubId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  "shipperType": "HUB_SHIPPER"
+}
