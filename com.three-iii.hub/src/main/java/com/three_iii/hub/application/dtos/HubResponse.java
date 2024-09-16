@@ -17,8 +17,8 @@ public class HubResponse {
     private UUID id;
     private String name;
     private String address;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String phone_number;
 
     public static HubResponse fromEntity(Hub hub) {

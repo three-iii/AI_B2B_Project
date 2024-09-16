@@ -36,10 +36,10 @@ public class Hub extends BaseEntity {
     private String address;
 
     @Column(nullable = false)
-    private String latitude;
+    private Double latitude;
 
     @Column(nullable = false)
-    private String longitude;
+    private Double longitude;
 
     @Column(nullable = false)
     private String phone_number;

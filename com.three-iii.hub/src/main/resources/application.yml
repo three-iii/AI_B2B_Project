@@ -16,10 +16,10 @@ spring:
         show_sql: true
         use_sql_comments: true
         highlight_sql: true
-    defer-datasource-initialization: true #ddl-auto ?? ?? data.sql ??
+    defer-datasource-initialization: true
   sql:
     init:
-      mode: never #?? ????? always
+      mode: never #초기 실행시에만 always
 
 server:
   port: 19093

@@ -14,11 +14,11 @@ public class HubDto {
 
     private String name;
     private String address;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String phone_number;
 
-    public static HubDto create(String name, String address, String latitude, String longitude,
+    public static HubDto create(String name, String address, Double latitude, Double longitude,
         String phone_number) {
         return HubDto.builder()
             .name(name)
