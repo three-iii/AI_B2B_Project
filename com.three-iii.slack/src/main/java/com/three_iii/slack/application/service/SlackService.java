@@ -1,4 +1,4 @@
-package com.three_iii.slack.application;
+package com.three_iii.slack.application.service;
 
 import static com.three_iii.slack.exception.ErrorCode.ERROR_SENDING_MESSAGE;
 
@@ -6,6 +6,8 @@ import com.slack.api.Slack;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
+import com.three_iii.slack.application.dtos.SlackDto;
+import com.three_iii.slack.application.dtos.SlackResponse;
 import com.three_iii.slack.domain.SlackMessage;
 import com.three_iii.slack.domain.repository.SlackRepository;
 import com.three_iii.slack.exception.ApplicationException;

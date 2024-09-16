@@ -1,4 +1,4 @@
-package com.three_iii.slack.application;
+package com.three_iii.slack.application.dtos;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

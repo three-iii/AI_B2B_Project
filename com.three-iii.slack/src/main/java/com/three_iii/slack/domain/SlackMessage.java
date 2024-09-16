@@ -1,6 +1,6 @@
 package com.three_iii.slack.domain;
 
-import com.three_iii.slack.application.SlackDto;
+import com.three_iii.slack.application.dtos.SlackDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
