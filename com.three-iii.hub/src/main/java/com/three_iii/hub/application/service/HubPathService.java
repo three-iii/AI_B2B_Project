@@ -73,4 +73,12 @@ public class HubPathService {
         hubPath.update(departurehub, arrivalsHub, request);
         return HubPathResponse.fromEntity(hubPath);
     }
+
+    @Transactional
+    public void deleteHubPath(UUID hubPathId) {
+        HubPath hubPath = hubPathRepository.findById(hubPathId)
+            .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));
+
+        hubPath.delete();
+    }
 }

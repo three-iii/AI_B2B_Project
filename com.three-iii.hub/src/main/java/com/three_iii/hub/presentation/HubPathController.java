@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,10 +54,18 @@ public class HubPathController {
     }
 
     @PatchMapping("/{hubPathId}")
-    @Operation(summary = "허브 수정", description = "허브를 수정한다.")
+    @Operation(summary = "허브 간 이동정보 수정", description = "허브 간 이동정보를 수정한다.")
     @PreAuthorize("hasAuthority('MASTER_MANAGER')")
     public Response<HubPathResponse> updateHubPath(@PathVariable UUID hubPathId,
         @RequestBody HubPathUpdateRequest request) {
         return Response.success(hubPathService.updateHubPath(hubPathId, request.toDTO()));
+    }
+
+    @DeleteMapping("/{hubPathId}")
+    @Operation(summary = "허브 간 이동정보 삭제", description = "허브 간 이동정보를 삭제한다.")
+    @PreAuthorize("hasAuthority('MASTER_MANAGER')")
+    public Response<?> deleteHubPath(@PathVariable UUID hubPathId) {
+        hubPathService.deleteHubPath(hubPathId);
+        return Response.success("해당 허브 간 이동경로가 삭제되었습니다");
     }
 }
