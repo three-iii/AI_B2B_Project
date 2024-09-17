@@ -20,6 +20,12 @@ spring:
   sql:
     init:
       mode: never #초기 실행시에만 always
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      username: default
+      password: systempass
 
 server:
   port: 19093

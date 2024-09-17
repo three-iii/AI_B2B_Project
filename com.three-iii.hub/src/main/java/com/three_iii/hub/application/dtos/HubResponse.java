@@ -1,6 +1,7 @@
 package com.three_iii.hub.application.dtos;
 
 import com.three_iii.hub.domain.Hub;
+import java.io.Serializable;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class HubResponse {
+public class HubResponse implements Serializable {
 
     private UUID id;
     private String name;
