@@ -19,7 +19,7 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      mode: never #?? ????? always
+      mode: never #초기 실행시에만 always
 
 server:
   port: 19093

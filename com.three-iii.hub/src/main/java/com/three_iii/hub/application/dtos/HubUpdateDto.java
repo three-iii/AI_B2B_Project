@@ -12,14 +12,13 @@ public class HubUpdateDto {
 
     private String name;
     private String address;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String phone_number;
 
-    public static HubUpdateDto create(String name, String address, String latitude,
-        String longitude, String phoneNumber) {
+    public static HubUpdateDto create(String name, String address, Double latitude,
+        Double longitude, String phoneNumber) {
         return HubUpdateDto.builder()
-            .name(name)
             .name(name)
             .address(address)
             .latitude(latitude)

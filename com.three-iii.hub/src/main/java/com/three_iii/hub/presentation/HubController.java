@@ -51,12 +51,12 @@ public class HubController {
         return Response.success(hubService.findHub(hubId));
     }
 
-    @PatchMapping("/{companyId}")
+    @PatchMapping("/{hubId}")
     @Operation(summary = "허브 수정", description = "허브를 수정한다.")
     @PreAuthorize("hasAuthority('MASTER_MANAGER')")
-    public Response<HubResponse> updateCompany(@PathVariable UUID companyId,
+    public Response<HubResponse> updateHub(@PathVariable UUID hubId,
         @RequestBody HubUpdateRequest request) {
-        return Response.success(hubService.updateHub(companyId, request.toDTO()));
+        return Response.success(hubService.updateHub(hubId, request.toDTO()));
     }
 
     @DeleteMapping("/{hubId}")

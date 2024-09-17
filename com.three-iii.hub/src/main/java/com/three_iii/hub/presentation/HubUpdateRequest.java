@@ -12,8 +12,8 @@ public class HubUpdateRequest {
 
     String name;
     String address;
-    String latitude;
-    String longitude;
+    Double latitude;
+    Double longitude;
     String phone_number;
 
     public HubUpdateDto toDTO() {

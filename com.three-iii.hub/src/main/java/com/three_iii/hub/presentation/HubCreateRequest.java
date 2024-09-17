@@ -16,9 +16,9 @@ public class HubCreateRequest {
     @NotNull
     String address;
     @NotNull
-    String latitude;
+    Double latitude;
     @NotNull
-    String longitude;
+    Double longitude;
     @NotNull
     String phone_number;
 

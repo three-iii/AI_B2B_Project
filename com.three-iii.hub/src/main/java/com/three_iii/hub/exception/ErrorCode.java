@@ -12,7 +12,6 @@ public enum ErrorCode {
 
     NOT_FOUND_HUB(HttpStatus.NOT_FOUND, "찾을 수 없는 허브입니다."),
     NOT_FOUND_HUBPATH(HttpStatus.NOT_FOUND, "찾을 수 없는 허브 경로입니다.");
-    NOT_FOUND_HUB(HttpStatus.NOT_FOUND, "찾을 수 없는 허브입니다.");
 
     private HttpStatus status;
     private String message;
