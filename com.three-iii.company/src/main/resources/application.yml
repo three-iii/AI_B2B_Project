@@ -46,6 +46,9 @@ springdoc:
   swagger-ui:
     path: /api/companies/swagger-ui.html
 
+gateway:
+  url: localhost:19091
+
 #openapi:
 #  service:
 #    # API Gateway 포트

@@ -13,6 +13,7 @@ import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
+import com.three_iii.company.infrastructure.HubService;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CompanyRepository companyRepository;
     private final AiService aiService;
+    private final HubService hubService;
 
     @Transactional
     public ProductResponse createProduct(ProductDto request, Long id, String role) {
-        // TODO 허브 검사
+        // 허브 검사
+        hubService.findHub(request.getHubId());
+
         // 업체 검사
         Company company = getCompany(request.getCompanyId());
 
@@ -80,7 +84,10 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<ProductResponse> findAllProduct(String keyword, UUID hubId, UUID companyId,
         Pageable pageable) {
-//        // TODO 허브 검사
+        // 허브 검사
+        if (hubId != null) {
+            hubService.findHub(hubId);
+        }
         // 업체 검사
         if (companyId != null) {
             getCompany(companyId);

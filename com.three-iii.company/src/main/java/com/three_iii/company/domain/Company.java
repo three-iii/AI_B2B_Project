@@ -38,8 +38,7 @@ public class Company extends BaseEntity {
     @Column(nullable = false)
     private Long userId;
 
-    //TODO 안지연
-    // hub 매핑
+    @Column(nullable = false)
     private UUID hubId;
 
     @Column(nullable = false)
@@ -57,6 +56,7 @@ public class Company extends BaseEntity {
 
     public static Company create(CompanyDto requestDto, Long userId) {
         return Company.builder()
+            .hubId(requestDto.getHubId())
             .userId(userId)
             .name(requestDto.getName())
             .type(requestDto.getType())
