@@ -62,4 +62,5 @@ public class HubPath extends BaseEntity {
         this.timeRequired =
             requestDto.getTimeRequired() == null ? this.timeRequired : requestDto.getTimeRequired();
     }
+
 }

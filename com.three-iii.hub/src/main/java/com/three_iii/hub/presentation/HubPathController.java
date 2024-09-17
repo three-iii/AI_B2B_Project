@@ -68,4 +68,5 @@ public class HubPathController {
         hubPathService.deleteHubPath(hubPathId);
         return Response.success("해당 허브 간 이동경로가 삭제되었습니다");
     }
+
 }
