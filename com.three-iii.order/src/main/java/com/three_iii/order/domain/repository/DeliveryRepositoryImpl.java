@@ -1,11 +1,13 @@
 package com.three_iii.order.domain.repository;
 
+import static com.three_iii.order.domain.QDelivery.delivery;
+
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.three_iii.order.application.dto.OrderResponseDto;
-import com.three_iii.order.domain.Order;
+import com.three_iii.order.application.dto.DeliveryResponseDto;
+import com.three_iii.order.domain.Delivery;
 import com.three_iii.order.domain.QOrder;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,29 +19,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @RequiredArgsConstructor
-public class OrderRepositoryImpl implements OrderRepositoryCustom {
+public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<OrderResponseDto> searchOrder(String keyword, String userName, Pageable pageable) {
-        QOrder qOrder = QOrder.order;
+    public Page<DeliveryResponseDto> searchDelivery(String keyword, Pageable pageable) {
 
         List<OrderSpecifier<?>> orders = getAllOrderSpecifiers(pageable);
 
-        QueryResults<Order> results = queryFactory
-            .selectFrom(qOrder)
+        QueryResults<Delivery> results = queryFactory
+            .selectFrom(delivery)
             .where(
-                nameContains(keyword),
-                userIdMatches(userName)
+                nameContains(keyword)
             )
             .orderBy(orders.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
 
-        List<OrderResponseDto> content = results.getResults().stream()
-            .map(OrderResponseDto::from)
+        List<DeliveryResponseDto> content = results.getResults().stream()
+            .map(DeliveryResponseDto::from)
             .collect(Collectors.toList());
         long total = results.getTotal();
 

@@ -22,6 +22,7 @@ public class OrderRequestDto {
 
     private UUID productionCompanyId;
     private UUID receiptCompanyId;
+    private String userName;
     private String deliveryAddress;
     private String recipientName;
     private String slackId;
@@ -31,7 +32,8 @@ public class OrderRequestDto {
 
     public Order toOrder(UserPrincipal userPrincipal, UUID productionCompany, UUID receiptCompany) {
         return Order.builder()
-            .orderItemId(UUID.randomUUID())
+            .Id(UUID.randomUUID())
+            .userName(userPrincipal.getUsername())
             .productionCompanyId(productionCompany)
             .receiptCompanyId(receiptCompany)
             .recipientName(this.recipientName)

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class OrderResponseDto {
 
     private UUID orderItemId;
-    private Long userId;
+    private String userName;
     private UUID productionCompanyId;
     private UUID receiptCompanyId;
     private List<OrderItemRequestDto> orderItems;
@@ -25,8 +25,8 @@ public class OrderResponseDto {
 
     public static OrderResponseDto from(Order order) {
         return OrderResponseDto.builder()
-            .orderItemId(order.getOrderItemId())
-            .userId(order.getUserId())
+            .orderItemId(order.getId())
+            .userName(order.getUserName())
             .productionCompanyId(order.getProductionCompanyId())
             .receiptCompanyId(order.getReceiptCompanyId())
             .orderItems(OrderItemRequestDto.from(order.getOrderItems()))
