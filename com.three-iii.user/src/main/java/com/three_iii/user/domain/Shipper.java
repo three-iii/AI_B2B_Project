@@ -1,5 +1,6 @@
 package com.three_iii.user.domain;
 
+import com.three_iii.user.presentation.dtos.ShipperUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "p_shipper")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Shipper {
+public class Shipper extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -43,5 +44,10 @@ public class Shipper {
 
     public static Shipper of(ShipperType type, User user, UUID hubId) {
         return new Shipper(type, user, hubId);
+    }
+
+    public void update(ShipperUpdateRequest request) {
+        this.hubId = UUID.fromString(request.getHubId());
+        this.type = ShipperType.valueOf(request.getShipperType());
     }
 }
