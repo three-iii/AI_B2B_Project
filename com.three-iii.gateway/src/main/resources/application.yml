@@ -54,6 +54,10 @@ spring:
           uri: lb://company
           predicates:
             - Path=/api/companies/**, /api/products/**
+        - id: slack
+          uri: lb://slack-service
+          predicates:
+            - Path=/api/slack-messages/**
       discovery:
         locator:
           enabled: true

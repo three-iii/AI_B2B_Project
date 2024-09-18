@@ -1,6 +1,6 @@
 spring:
   application:
-    name: slack
+    name: slack-service
   datasource:
     url: jdbc:postgresql://localhost:5432/b2b
     username: postgres
@@ -48,3 +48,9 @@ gemini:
   api:
     url: https://generativelanguage.googleapis.com
     key: ${GEMINI_KEY}
+
+springdoc:
+  api-docs:
+    path: /api/slack-messages/v3/api-docs
+  swagger-ui:
+    path: /api/slack-messages/swagger-ui.html
