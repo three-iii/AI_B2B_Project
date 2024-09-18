@@ -13,6 +13,10 @@ import com.three_iii.hub.domain.repository.HubRepository;
 import com.three_iii.hub.exception.ApplicationException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,7 @@ public class HubPathService {
     private final HubPathRepository hubPathRepository;
 
     @Transactional
+    @CachePut(cacheNames = "hubPathCache", key = "#result.id")
     public HubPathResponse createHubPath(HubPathDto request) {
         Hub departurehub = hubRepository.findById(request.getDepartureId())
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
@@ -39,11 +44,13 @@ public class HubPathService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "hubPathAllCache", key = "methodName")
     public Page<HubPathResponse> findAllHubPath(String keyword, Pageable pageable) {
         return hubPathRepository.searchHubPath(keyword, pageable);
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "hubPathCache", key = "args[0]")
     public HubPathResponse findHubPath(UUID hubPathId) {
         HubPath hubPath = hubPathRepository.findById(hubPathId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));
@@ -51,6 +58,8 @@ public class HubPathService {
     }
 
     @Transactional
+    @CachePut(cacheNames = "hubPathCache", key = "args[0]")
+    @CacheEvict(cacheNames = "hubPathAllCache", allEntries = true)
     public HubPathResponse updateHubPath(UUID hubPathId, HubPathUpdateDto request) {
         HubPath hubPath = hubPathRepository.findById(hubPathId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));
@@ -75,6 +84,10 @@ public class HubPathService {
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "hubPathCache", key = "args[0]"),
+        @CacheEvict(cacheNames = "hubPathAllCache", allEntries = true)
+    })
     public void deleteHubPath(UUID hubPathId) {
         HubPath hubPath = hubPathRepository.findById(hubPathId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUBPATH));

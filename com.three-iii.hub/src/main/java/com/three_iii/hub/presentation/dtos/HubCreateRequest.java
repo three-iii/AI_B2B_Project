@@ -1,4 +1,4 @@
-package com.three_iii.hub.presentation;
+package com.three_iii.hub.presentation.dtos;
 
 import com.three_iii.hub.application.dtos.HubDto;
 import jakarta.validation.constraints.NotNull;

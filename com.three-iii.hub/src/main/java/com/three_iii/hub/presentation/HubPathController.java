@@ -3,6 +3,8 @@ package com.three_iii.hub.presentation;
 import com.three_iii.hub.application.dtos.HubPathResponse;
 import com.three_iii.hub.application.service.HubPathService;
 import com.three_iii.hub.exception.Response;
+import com.three_iii.hub.presentation.dtos.HubPathCreateRequest;
+import com.three_iii.hub.presentation.dtos.HubPathUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

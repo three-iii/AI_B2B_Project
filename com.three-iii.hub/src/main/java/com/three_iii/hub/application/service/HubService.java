@@ -10,6 +10,10 @@ import com.three_iii.hub.domain.repository.HubRepository;
 import com.three_iii.hub.exception.ApplicationException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,17 +26,20 @@ public class HubService {
     private final HubRepository hubRepository;
 
     @Transactional
+    @CachePut(cacheNames = "hubCache", key = "#result.id")
     public HubResponse createHub(HubDto request) {
         Hub hub = Hub.create(request);
         return HubResponse.fromEntity(hubRepository.save(hub));
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "hubAllCache", key = "methodName")
     public Page<HubResponse> findAllHub(String keyword, Pageable pageable) {
         return hubRepository.searchHub(keyword, pageable);
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "hubCache", key = "args[0]")
     public HubResponse findHub(UUID hubId) {
         Hub hub = hubRepository.findById(hubId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
@@ -40,6 +47,10 @@ public class HubService {
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "hubCache", key = "args[0]"),
+        @CacheEvict(cacheNames = "hubAllCache", allEntries = true)
+    })
     public void deleteHub(UUID hubId) {
         Hub hub = hubRepository.findById(hubId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
@@ -47,6 +58,8 @@ public class HubService {
     }
 
     @Transactional
+    @CachePut(cacheNames = "hubCache", key = "args[0]")
+    @CacheEvict(cacheNames = "hubAllCache", allEntries = true)
     public HubResponse updateHub(UUID hubId, HubUpdateDto request) {
         Hub hub = hubRepository.findById(hubId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
