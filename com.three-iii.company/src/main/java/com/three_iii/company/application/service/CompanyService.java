@@ -1,5 +1,6 @@
 package com.three_iii.company.application.service;
 
+import static com.three_iii.company.exception.ErrorCode.ACCESS_DENIED;
 import static com.three_iii.company.exception.ErrorCode.DUPLICATED_NAME;
 import static com.three_iii.company.exception.ErrorCode.NOT_FOUND_COMPANY;
 
@@ -9,6 +10,8 @@ import com.three_iii.company.application.dtos.company.CompanyUpdateDto;
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.exception.ApplicationException;
+import com.three_iii.company.infrastructure.HubService;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,14 +24,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final HubService hubService;
 
     @Transactional
-    public CompanyResponse createCompany(CompanyDto request) {
+    public CompanyResponse createCompany(CompanyDto request, Long userId) {
+        // 허브 검사
+        hubService.findHub(request.getHubId());
+
         // 업체명 중복 검사
         if (companyRepository.existsByName(request.getName())) {
             throw new ApplicationException(DUPLICATED_NAME);
         }
-        Company company = Company.create(request);
+        Company company = Company.create(request, userId);
         return CompanyResponse.fromEntity(companyRepository.save(company));
     }
 
@@ -46,16 +53,30 @@ public class CompanyService {
     }
 
     @Transactional
-    public void deleteCompany(UUID companyId) {
+    public void deleteCompany(UUID companyId, String username) {
         Company company = companyRepository.findById(companyId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
-        company.delete();
+        company.delete(username);
     }
 
     @Transactional
-    public CompanyResponse updateCompany(UUID companyId, CompanyUpdateDto request) {
+    public CompanyResponse updateCompany(UUID companyId, CompanyUpdateDto request, Long userId,
+        String role) {
+        // 허브 검사
+        hubService.findHub(request.getHubId());
+
         Company company = companyRepository.findById(companyId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+
+        if (!company.getHubId().equals(request.getHubId())) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
+
+        // 업체: 자신의 업체만 수정 가능
+        if (role.equals("COMPANY_MANAGER") && !Objects.equals(company.getUserId(), userId)) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
+
         company.update(request);
         return CompanyResponse.fromEntity(company);
     }

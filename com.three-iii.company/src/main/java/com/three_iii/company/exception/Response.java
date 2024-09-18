@@ -22,6 +22,13 @@ public class Response<T> {
             .build();
     }
 
+    public static <T> Response<T> error(String errorCode, T result) {
+        return Response.<T>builder()
+            .resultCode(errorCode)
+            .result(result)
+            .build();
+    }
+
     public static <T> Response<T> error(T result) {
         return Response.<T>builder()
             .resultCode("ERROR")

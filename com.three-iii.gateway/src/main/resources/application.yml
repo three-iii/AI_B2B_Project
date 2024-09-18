@@ -42,6 +42,14 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/auth/**
+        - id: hub
+          uri: lb://hub-service
+          predicates:
+            - Path=/api/hubs/**, /api/hub-paths/**
+        - id: user
+          uri: lb://user-service
+          predicates:
+            - Path=/api/shippers/**
         - id: company
           uri: lb://company
           predicates:

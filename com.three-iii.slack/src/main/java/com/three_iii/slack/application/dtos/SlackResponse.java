@@ -1,4 +1,4 @@
-package com.three_iii.slack.application;
+package com.three_iii.slack.application.dtos;
 
 import com.three_iii.slack.domain.SlackMessage;
 import java.time.LocalDateTime;

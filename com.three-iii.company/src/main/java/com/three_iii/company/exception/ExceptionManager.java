@@ -15,7 +15,7 @@ public class ExceptionManager {
     public ResponseEntity<?> runtimeExceptionHandler(ApplicationException e) {
         log.error(e.getMessage());
         return ResponseEntity.status(e.getHttpStatus())
-            .body(Response.error(e.getMessage()));
+            .body(Response.error(e.getErrorCode().toString(), e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)

@@ -15,17 +15,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CompanyResponse {
 
+    private UUID hubId;
     private UUID id;
+    private Long userId;
     private String name;
     private CompanyTypeEnum type;
     private String address;
+//    private List<ProductResponse> productList;
 
     public static CompanyResponse fromEntity(Company company) {
         return CompanyResponse.builder()
+            .hubId(company.getHubId())
+            .userId(company.getUserId())
             .id(company.getId())
             .name(company.getName())
             .type(company.getType())
             .address(company.getAddress())
+//            .productList(company.getProductList().stream()
+//                .map(ProductResponse::fromEntity).toList())
             .build();
     }
 }

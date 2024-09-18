@@ -38,3 +38,13 @@ logging:
 slack:
   token: ${SLACK_TOKEN}
   id: ${SLACK_CHANNEL_ID}
+
+weather:
+  api:
+    url: https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
+    serviceKey: ${WEATHER_SERVICE_KEY}
+
+gemini:
+  api:
+    url: https://generativelanguage.googleapis.com
+    key: ${GEMINI_KEY}
