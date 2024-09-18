@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -74,6 +76,22 @@ public class ShipperService {
         return responses;
     }
 
+    public ShipperReadResponse find(UUID shipperId, UserPrincipal getter) {
+        final Shipper shipper = findShipperById(shipperId);
+        // 마스터 관리자 / 허브 관리자 / 본인만 확인 가능
+        if (Role.valueOf(getter.getRole()) != Role.MASTER_MANAGER) {
+            if (Role.valueOf(getter.getRole()) != Role.HUB_MANAGER) {
+                if (shipper.getUser().getId() != getter.getId()) {
+                    throw new UserException(ErrorCode.ACCESS_DENIED);
+                }
+            }
+            // TODO 자신의 허브 배송담당자를 삭제하는 허브 관리자인지 확인
+        }
+        ShipperReadResponse response = ShipperReadResponse.fromEntity(shipper);
+        // TODO response.updateHubName();
+        return response;
+    }
+
     @Transactional
     public String update(UUID shipperId, ShipperUpdateRequest request) {
         Shipper shipper = findShipperById(shipperId);
@@ -99,4 +117,6 @@ public class ShipperService {
             () -> new UserException(ErrorCode.NOT_FOUND_SHIPPER)
         );
     }
+
+
 }

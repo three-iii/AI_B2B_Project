@@ -31,13 +31,18 @@ public class ShipperController {
     @PreAuthorize("hasAuthority('MASTER_MANAGER')")
     public Response<String> create(@RequestBody ShipperCreateRequest request) {
         return Response.success((shipperService.create(request).toString()));
-
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('MASTER_MANAGER')")
     public Response<List<ShipperReadResponse>> findAll() {
         return Response.success((shipperService.findAll()));
+    }
+
+    @GetMapping("/{shipperId}")
+    public Response<ShipperReadResponse> find(@PathVariable(name = "shipperId") String shipperId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return Response.success((shipperService.find(UUID.fromString(shipperId), userPrincipal)));
     }
 
     @PatchMapping("/{shipperId}")
