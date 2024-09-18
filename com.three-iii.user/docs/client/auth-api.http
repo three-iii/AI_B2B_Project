@@ -19,7 +19,7 @@ Content-Type: application/json
   "password": "password",
   "slackId": "master",
   "master": true,
-  "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III1"
+  "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III"
 }
 
 ### 일반 사용자 로그인 API
