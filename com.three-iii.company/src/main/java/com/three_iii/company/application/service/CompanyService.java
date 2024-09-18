@@ -10,6 +10,7 @@ import com.three_iii.company.application.dtos.company.CompanyUpdateDto;
 import com.three_iii.company.domain.Company;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.exception.ApplicationException;
+import com.three_iii.company.infrastructure.HubService;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final HubService hubService;
 
     @Transactional
     public CompanyResponse createCompany(CompanyDto request, Long userId) {
+        // 허브 검사
+        hubService.findHub(request.getHubId());
+
         // 업체명 중복 검사
         if (companyRepository.existsByName(request.getName())) {
             throw new ApplicationException(DUPLICATED_NAME);
@@ -57,8 +62,15 @@ public class CompanyService {
     @Transactional
     public CompanyResponse updateCompany(UUID companyId, CompanyUpdateDto request, Long userId,
         String role) {
+        // 허브 검사
+        hubService.findHub(request.getHubId());
+
         Company company = companyRepository.findById(companyId)
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_COMPANY));
+
+        if (!company.getHubId().equals(request.getHubId())) {
+            throw new ApplicationException(ACCESS_DENIED);
+        }
 
         // 업체: 자신의 업체만 수정 가능
         if (role.equals("COMPANY_MANAGER") && !Objects.equals(company.getUserId(), userId)) {

@@ -1,6 +1,5 @@
 package com.three_iii.company.presentation;
 
-
 import com.three_iii.company.application.dtos.company.CompanyResponse;
 import com.three_iii.company.application.service.CompanyService;
 import com.three_iii.company.domain.UserPrincipal;
