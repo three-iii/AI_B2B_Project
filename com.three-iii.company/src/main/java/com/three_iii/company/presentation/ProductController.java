@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +60,21 @@ public class ProductController {
         Pageable pageable) {
         return Response.success(productService.findAllProduct(keyword, hubId, companyId, pageable));
     }
+
+    @PutMapping("/{productId}/stock")
+    @Operation(summary = "상품 재고 업데이트")
+    public Response<Void> updateProductStock(@PathVariable UUID productId,
+        @RequestParam int quantity) {
+        productService.updateProductStock(productId, quantity);
+        return Response.success(null);
+    }
+
+    @PutMapping("/restore-stock/{productId}")
+    public Response<Void> restoreStock(@PathVariable UUID productId, @RequestBody int quantity) {
+        productService.restoreStock(productId, quantity);
+        return Response.success(null);
+    }
+
 
     @PatchMapping("/{productId}")
     @Operation(summary = "상품 수정", description = "상품을 수정한다.")

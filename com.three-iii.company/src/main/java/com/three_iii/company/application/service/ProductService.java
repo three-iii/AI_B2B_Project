@@ -12,12 +12,15 @@ import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +80,24 @@ public class ProductService {
             getCompany(companyId);
         }
         return productRepository.searchProduct(keyword, hubId, companyId, pageable);
+    }
+
+    @Transactional
+    public void updateProductStock(UUID productId, int newStockQuantity) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "상품을 찾을 수 없습니다."));
+        product.setQuantity(newStockQuantity);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public void restoreStock(UUID productId, int quantity) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("해당 주문 항목에 해당하는 상품을 찾을 수 없습니다."));
+
+        product.setStock(product.getStock() + quantity);
+        productRepository.save(product);
     }
 
     @Transactional

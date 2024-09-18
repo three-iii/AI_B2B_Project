@@ -46,6 +46,10 @@ spring:
           uri: lb://company
           predicates:
             - Path=/api/companies/**, /api/products/**
+        - id: order
+          uri: lb://orders
+          predicates:
+            - Path=/api/orders/**
       discovery:
         locator:
           enabled: true

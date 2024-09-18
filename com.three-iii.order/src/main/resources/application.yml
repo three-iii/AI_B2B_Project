@@ -1,6 +1,6 @@
 spring:
   application:
-    name: service
+    name: orders
   datasource:
     url: jdbc:postgresql://localhost:5432/b2b
     username: postgres
@@ -34,3 +34,9 @@ logging:
         orm:
           jdbc:
             bind: trace
+
+springdoc:
+  api-docs:
+    path: /api/orders/v3/api-docs
+  swagger-ui:
+    path: /api/orders/swagger-ui.html

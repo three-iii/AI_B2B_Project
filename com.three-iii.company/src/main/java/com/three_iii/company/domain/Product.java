@@ -16,9 +16,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,6 +47,9 @@ public class Product extends BaseEntity {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Column(nullable = false)
+    private int stock;
 
     public static Product create(Company company, UUID hubId, String name, String description,
         Integer quantity) {
