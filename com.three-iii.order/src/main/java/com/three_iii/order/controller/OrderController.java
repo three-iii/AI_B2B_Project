@@ -46,7 +46,6 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> createOrder(
         @RequestBody OrderRequestDto requestDto,
         @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        log.info("request: {}", requestDto);
         return ResponseEntity.ok(orderService.createOrder(requestDto, userPrincipal));
     }
 

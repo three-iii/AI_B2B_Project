@@ -6,7 +6,6 @@ import com.three_iii.order.application.dto.OrderRequestDto;
 import com.three_iii.order.application.dto.OrderResponseDto;
 import com.three_iii.order.application.dto.OrderUpdateRequestDto;
 import com.three_iii.order.application.dto.ProductDto;
-import com.three_iii.order.application.dto.UserDto;
 import com.three_iii.order.domain.Delivery;
 import com.three_iii.order.domain.DeliveryStatusEnum;
 import com.three_iii.order.domain.Order;
@@ -18,7 +17,6 @@ import com.three_iii.order.domain.repository.DeliveryPathRepository;
 import com.three_iii.order.domain.repository.DeliveryRepository;
 import com.three_iii.order.domain.repository.OrderRepository;
 import com.three_iii.order.infrastructure.ProductClient;
-import com.three_iii.order.infrastructure.UserServiceClient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -45,32 +41,19 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final DeliveryRepository deliveryRepository;
     private final DeliveryPathRepository deliveryPathRepository;
-    private final UserServiceClient userServiceClient;
 
     // 주문 전체 조회
     public Page<OrderResponseDto> findAllOrder(String keyword, Pageable pageable,
         UserPrincipal userPrincipal) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // 현재 로그인한 사용자 이름을 가져옴
+        String role = userPrincipal.getRole();
 
-        // 사용자 권한에 따라 처리
-        boolean isUser = authentication.getAuthorities().stream()
-            .anyMatch(authority -> authority.getAuthority().equals("CUSTOMER"));
-
-        Long userId = getUserIdFromUsername(username); // 사용자 이름으로 사용자 id조회
-
-        if (isUser) {
+        if (role.equals("CUSTOMER")) {
             // 사용자인 경우 자신의 주문만 조회 가능
-            return orderRepository.searchOrder(keyword, userId, pageable);
+            return orderRepository.searchOrder(keyword, userPrincipal.getUsername(), pageable);
         } else {
             // 외 관리자 등은 전체 주문 조회 가능
             return orderRepository.searchOrder(keyword, null, pageable);
         }
-    }
-
-    private Long getUserIdFromUsername(String username) {
-        UserDto userDto = userServiceClient.getUserByUsername(username);
-        return userDto.getId();
     }
 
     // 주문 추가
@@ -170,7 +153,7 @@ public class OrderService {
         Delivery delivery = createDelivery(requestDto, savedOrder);
         deliveryRepository.save(delivery);
 
-//        order.setDelivery(delivery);
+        savedOrder.setDelivery(delivery);
 
         return OrderResponseDto.from(savedOrder);
     }

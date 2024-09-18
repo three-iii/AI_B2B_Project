@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class DeliveryResponseDto {
 
     private UUID deliveryId;
-    private UUID orderId;
     private DeliveryStatusEnum deliveryStatus;
     private UUID originHubId;
     private UUID destinationHubId;
@@ -25,7 +24,6 @@ public class DeliveryResponseDto {
     public static DeliveryResponseDto from(Delivery delivery) {
         return DeliveryResponseDto.builder()
             .deliveryId(delivery.getDeliveryId())
-            .orderId(delivery.getOrder().getOrderItemId())
             .deliveryStatus(delivery.getStatus())
             .originHubId(delivery.getOriginHubId())
             .destinationHubId(delivery.getDestinationHubId())

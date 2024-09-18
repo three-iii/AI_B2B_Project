@@ -22,7 +22,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<OrderResponseDto> searchOrder(String keyword, Long userId, Pageable pageable) {
+    public Page<OrderResponseDto> searchOrder(String keyword, String userName, Pageable pageable) {
         QOrder qOrder = QOrder.order;
 
         List<OrderSpecifier<?>> orders = getAllOrderSpecifiers(pageable);
@@ -31,7 +31,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
             .selectFrom(qOrder)
             .where(
                 nameContains(keyword),
-                userIdMatches(userId)
+                userIdMatches(userName)
             )
             .orderBy(orders.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
@@ -50,8 +50,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         return keyword != null ? QOrder.order.userName.containsIgnoreCase(keyword) : null;
     }
 
-    private BooleanExpression userIdMatches(Long userId) {
-        return userId != null ? QOrder.order.userId.eq(userId) : null;
+    private BooleanExpression userIdMatches(String userName) {
+        return userName != null ? QOrder.order.userName.eq(userName) : null;
     }
 
     private List<OrderSpecifier<?>> getAllOrderSpecifiers(Pageable pageable) {

@@ -32,7 +32,7 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue
     @Column
-    private UUID orderItemId;
+    private UUID Id;
 
     @Column
     private Long userId;
@@ -54,7 +54,7 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(optional = true)
     private Delivery delivery;
 
     @Enumerated(value = EnumType.STRING)

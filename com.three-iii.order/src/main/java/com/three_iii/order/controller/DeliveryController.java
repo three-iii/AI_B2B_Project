@@ -9,12 +9,15 @@ import com.three_iii.order.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,13 +28,19 @@ public class DeliveryController {
     private final DeliveryService deliveryService;
 
     // 배송 전체조회
+    @GetMapping
+    public Response<Page<DeliveryResponseDto>> findAllDelivery(
+        @RequestParam(required = false) String keyword,
+        Pageable pageable) {
+        return Response.success(deliveryService.findAllDelivery(keyword, pageable));
+    }
 
     // 배송 단건 조회
     @GetMapping("/{shippingId}")
     @Operation(summary = "배송 단건 조회")
     public Response<DeliveryResponseDto> findDelivery(
         @PathVariable(name = "shippingId") UUID shippingId,
-        @RequestHeader UserPrincipal userPrincipal) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return Response.success(deliveryService.findDelivery(shippingId, userPrincipal));
     }
 

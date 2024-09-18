@@ -8,6 +8,8 @@ import com.three_iii.order.domain.repository.DeliveryRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +22,20 @@ public class DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
 
+    public Page<DeliveryResponseDto> findAllDelivery(String keyword, Pageable pageable) {
+        return deliveryRepository.searchDelivery(keyword, pageable);
+    }
+
     // 배송 단건 조회
     public DeliveryResponseDto findDelivery(UUID shippingId, UserPrincipal userPrincipal) {
-        Delivery delivery = deliveryRepository.findOneByOrderOrderItemIdAndDeletedAtIsNull(
+        Delivery delivery = deliveryRepository.findById(
                 shippingId)
             .orElseThrow(() -> {
                 log.error("배달 정보를 찾을 수 없습니다.");
                 return new ResponseStatusException(HttpStatus.NOT_FOUND, "배달 정보를 찾을 수 없습니다.");
             });
 
-        if (!delivery.getOrder().getUserId().equals(userPrincipal.getId())) {
+        if (!delivery.getOrder().getUserName().equals(userPrincipal.getUsername())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
         }
         return DeliveryResponseDto.from(delivery);
