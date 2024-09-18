@@ -24,8 +24,8 @@ public class ScheduleService {
     @Scheduled(cron = " 0 0/1 * * * *")
     //@Scheduled(cron = " 0 0 6 * * *") //매일 6시에 실행
     public void companyShipperSchedule() throws SlackApiException, IOException {
-        String weatherInfo = weatherService.getWeather();
-        log.info("날씨 {}", weatherInfo);
+        //String weatherInfo = weatherService.getWeather();
+        //log.info("날씨 {}", weatherInfo);
 
         //slackService.createSlackMessage(new SlackDto("U07MM562S56", "메시지 테스트 입니다"));
     }
