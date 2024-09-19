@@ -5,11 +5,21 @@ import com.three_iii.slack.application.dtos.SlackDto;
 import com.three_iii.slack.application.service.AiService;
 import com.three_iii.slack.application.service.SlackService;
 import com.three_iii.slack.application.service.WeatherService;
+import com.three_iii.slack.infrastructure.CompanyResponse;
+import com.three_iii.slack.infrastructure.CompanyService;
 import com.three_iii.slack.infrastructure.DeliveryResponse;
 import com.three_iii.slack.infrastructure.DeliveryService;
+import com.three_iii.slack.infrastructure.HubResponse;
+import com.three_iii.slack.infrastructure.HubService;
+import com.three_iii.slack.infrastructure.OrderResponse;
+import com.three_iii.slack.infrastructure.OrderService;
 import com.three_iii.slack.infrastructure.UserService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 public class ScheduleService {
 
     private final SlackService slackService;
@@ -25,15 +34,23 @@ public class ScheduleService {
     private final AiService aiService;
     private final UserService userService;
     private final DeliveryService deliveryService;
+    private final OrderService orderService;
+    private final CompanyService companyService;
+    private final HubService hubService;
 
     public ScheduleService(SlackService slackService, WeatherService weatherService,
         AiService aiService, UserService userService,
-        @Lazy DeliveryService deliveryService) { //순환 참조 문제로 @Lazy 어노테이션 사용
+        @Lazy DeliveryService deliveryService,
+        OrderService orderService, CompanyService companyService,
+        HubService hubService) { //순환 참조 문제로 @Lazy 어노테이션 사용
         this.slackService = slackService;
         this.weatherService = weatherService;
         this.aiService = aiService;
         this.userService = userService;
         this.deliveryService = deliveryService;
+        this.orderService = orderService;
+        this.companyService = companyService;
+        this.hubService = hubService;
     }
 
     // 업체 배송 담담자에게 날씨와 배송 정보 알림 처리
@@ -51,7 +68,7 @@ public class ScheduleService {
             log.info("slack id {}", slackId);
             log.info("날씨 {}", weatherInfo);
             String message = aiService.getContents(
-                "날씨 정보와 배송 정보를 50자 이내의 문장으로 요약해줘\n"
+                "다음 내용을 모두 포함해서 배송담당자가 알아보기 쉽게 메세지를 생성해줘\n"
                     + weatherInfo + "\n"
                     + "배송지 주소: " + deliveryResponse.getAddress() + "\n"
                     + "수령인: " + deliveryResponse.getRecipientName());
@@ -65,8 +82,41 @@ public class ScheduleService {
     @Scheduled(cron = " 0 0/1 * * * *")
     //@Scheduled(cron = " 0 0 8 * * *") //매일 9시에 실행
     public void hubShipperSchedule() throws SlackApiException, IOException {
+        List<OrderResponse> orderResponseList = orderService.findAllOrderBetweenTime();
+        // 허브ID별로 주문을 그룹화하기 위한 맵
+        Map<UUID, List<OrderResponse>> ordersByHub = new HashMap<>();
+        for (OrderResponse orderResponse : orderResponseList) {
+            CompanyResponse companyResponse = companyService.findCompany(
+                orderResponse.getProductionCompanyId()).getResult();
+            log.info("getProductionCompanyId {}", orderResponse.getProductionCompanyId());
+            log.info("companyId {}", companyResponse.getId());
+            log.info("hubId {}", companyResponse.getHubId());
 
-        //slackService.createSlackMessage(new SlackDto("U07MM562S56", "메시지 테스트 입니다"));
+            ordersByHub.computeIfAbsent(companyResponse.getHubId(), k -> new ArrayList<>())
+                .add(orderResponse);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        ordersByHub.forEach(((uuid, orderResponses) -> {
+            HubResponse hubResponse = hubService.findHub(uuid).getResult();
+            String message = aiService.getContents(
+                "다음 내용을 모두 포함해서 배송담당자가 알아보기 쉽게 메세지를 생성해줘\n"
+                    + "허브 이름:" + hubResponse.getName() + "\n"
+                    + "허브 주소: " + hubResponse.getAddress() + "\n"
+                    + "허브 전화번호: " + hubResponse.getPhone_number() + "\n"
+                    + "총 주문 건수: " + orderResponses.size());
+            log.info("메세지: {}", message);
+            sb.append(message);
+        }));
+
+//        try {
+//            slackService.createSlackMessage(
+//                new SlackDto("U07MM562S56", "총 " + orderResponses.size() + "개의 주문이 접수되었습니다."));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (SlackApiException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 }
