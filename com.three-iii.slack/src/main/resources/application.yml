@@ -54,3 +54,11 @@ springdoc:
     path: /api/slack-messages/v3/api-docs
   swagger-ui:
     path: /api/slack-messages/swagger-ui.html
+
+gateway:
+  url: localhost:19091
+
+jwt:
+  audience: b2b-client
+  expiration-minutes: 30
+  secret-key: local-three-iii-authenticate-secret-key
