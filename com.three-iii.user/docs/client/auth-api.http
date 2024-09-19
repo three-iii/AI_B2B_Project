@@ -3,9 +3,9 @@ POST http://localhost:19091/api/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "password",
-  "slackId": "lingu",
+  "username": "user2",
+  "password": "password2",
+  "slackId": "lingu2",
   "master": false,
   "masterToken": ""
 }
@@ -19,7 +19,7 @@ Content-Type: application/json
   "password": "password",
   "slackId": "master",
   "master": true,
-  "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III1"
+  "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III"
 }
 
 ### 일반 사용자 로그인 API
