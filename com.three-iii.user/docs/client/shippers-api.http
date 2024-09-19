@@ -4,8 +4,8 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "userId": "1",
-  "hubId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  "userId": "2",
+  "hubId": "75780ec9-754c-468b-a264-e8e26f90b006",
   "shipperType": "HUB_SHIPPER"
 }
 

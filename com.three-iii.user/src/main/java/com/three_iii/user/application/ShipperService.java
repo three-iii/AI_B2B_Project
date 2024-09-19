@@ -9,6 +9,7 @@ import com.three_iii.user.domain.repository.ShipperRepository;
 import com.three_iii.user.domain.repository.UserRepository;
 import com.three_iii.user.exception.ErrorCode;
 import com.three_iii.user.exception.UserException;
+import com.three_iii.user.infrastructure.HubClient;
 import com.three_iii.user.presentation.dtos.ShipperCreateRequest;
 import com.three_iii.user.presentation.dtos.ShipperReadResponse;
 import com.three_iii.user.presentation.dtos.ShipperUpdateRequest;
@@ -28,6 +29,7 @@ public class ShipperService {
 
     private final ShipperRepository shipperRepository;
     private final UserRepository userRepository;
+    private final HubClient hubClient;
     private final String SHIPPER_ROLE_NAME = "SHIPPER";
 
     @Transactional
@@ -41,7 +43,8 @@ public class ShipperService {
             throw new UserException(ErrorCode.DUPLICATE_SHIPPER);
         }
 
-        // TODO Hub 존재 확인 - FeignClient 호출
+        // 허브 존재여부 확인
+        hubClient.getHub(UUID.fromString(request.getHubId()));
 
         Shipper shipper = Shipper.of(
             ShipperType.valueOf(request.getShipperType()),
