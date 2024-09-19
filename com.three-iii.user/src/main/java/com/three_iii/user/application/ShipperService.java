@@ -9,6 +9,7 @@ import com.three_iii.user.domain.repository.ShipperRepository;
 import com.three_iii.user.domain.repository.UserRepository;
 import com.three_iii.user.exception.ErrorCode;
 import com.three_iii.user.exception.UserException;
+import com.three_iii.user.infrastructure.HubClient;
 import com.three_iii.user.presentation.dtos.ShipperCreateRequest;
 import com.three_iii.user.presentation.dtos.ShipperReadResponse;
 import com.three_iii.user.presentation.dtos.ShipperUpdateRequest;
@@ -28,6 +29,7 @@ public class ShipperService {
 
     private final ShipperRepository shipperRepository;
     private final UserRepository userRepository;
+    private final HubClient hubClient;
     private final String SHIPPER_ROLE_NAME = "SHIPPER";
 
     @Transactional
@@ -41,7 +43,8 @@ public class ShipperService {
             throw new UserException(ErrorCode.DUPLICATE_SHIPPER);
         }
 
-        // TODO Hub 존재 확인 - FeignClient 호출
+        // 허브 존재여부 확인
+        hubClient.getHub(UUID.fromString(request.getHubId()));
 
         Shipper shipper = Shipper.of(
             ShipperType.valueOf(request.getShipperType()),
@@ -92,11 +95,34 @@ public class ShipperService {
         return response;
     }
 
+    public List<ShipperReadResponse> findByType(String type, UserPrincipal getter) {
+        // Shipper 목록 조회
+        final List<Shipper> shippers = shipperRepository.findByType(ShipperType.valueOf(type));
+
+        final List<UUID> shipperIds = shippers.stream()
+            .map(Shipper::getId)
+            .toList();
+
+        List<ShipperReadResponse> responses = shippers
+            .stream()
+            .map(ShipperReadResponse::fromEntity)
+            .collect(Collectors.toList());
+
+        // TODO hub 이름 feignClient 로 호출해서 매핑해주기
+//        HashMap<UUID, String> hubNames;
+//
+//        responses.forEach(response ->
+//            response.updateHubName(hubNames.get(response.getHubId())));
+
+        return responses;
+    }
+
     @Transactional
     public String update(UUID shipperId, ShipperUpdateRequest request) {
         Shipper shipper = findShipperById(shipperId);
 
-        // TODO Hub 존재 확인 - FeignClient 호출
+        // 허브 존재여부 확인
+        hubClient.getHub(UUID.fromString(request.getHubId()));
 
         shipper.update(request);
         return shipper.getId().toString();

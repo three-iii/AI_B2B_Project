@@ -45,3 +45,6 @@ springdoc:
     path: /api/auth/v3/api-docs
   swagger-ui:
     path: /api/auth/swagger-ui.html
+
+gateway:
+  url: localhost:19091

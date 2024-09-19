@@ -1,6 +1,7 @@
 package com.three_iii.user.domain.repository;
 
 import com.three_iii.user.domain.Shipper;
+import com.three_iii.user.domain.ShipperType;
 import com.three_iii.user.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,7 @@ public interface ShipperRepository extends JpaRepository<Shipper, UUID> {
 
     @Query("SELECT s FROM Shipper s JOIN FETCH s.user WHERE s.id = :shipperId")
     Optional<Shipper> findById(@Param("shipperId") UUID shipperId);
+
+    @Query("SELECT s FROM Shipper s JOIN FETCH s.user WHERE s.type = :type")
+    List<Shipper> findByType(ShipperType type);
 }
