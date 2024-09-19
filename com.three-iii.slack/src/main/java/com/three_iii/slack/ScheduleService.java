@@ -1,6 +1,7 @@
 package com.three_iii.slack;
 
 import com.slack.api.methods.SlackApiException;
+import com.three_iii.slack.application.dtos.SlackDto;
 import com.three_iii.slack.application.service.AiService;
 import com.three_iii.slack.application.service.SlackService;
 import com.three_iii.slack.application.service.WeatherService;
@@ -49,7 +50,13 @@ public class ScheduleService {
                 .getResult().getSlackId();
             log.info("slack id {}", slackId);
             log.info("날씨 {}", weatherInfo);
-            //slackService.createSlackMessage(new SlackDto("U07MM562S56", "메시지 테스트 입니다"));
+            String message = aiService.getContents(
+                "날씨 정보와 배송 정보를 50자 이내의 문장으로 요약해줘\n"
+                    + weatherInfo + "\n"
+                    + "배송지 주소: " + deliveryResponse.getAddress() + "\n"
+                    + "수령인: " + deliveryResponse.getRecipientName());
+            log.info("메세지 {}", message);
+            slackService.createSlackMessage(new SlackDto(slackId, message));
         }
 
     }
