@@ -1,0 +1,48 @@
+### 일반 사용자 회원 가입 API
+POST http://localhost:19091/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "password",
+  "slackId": "lingu",
+  "master": false,
+  "masterToken": ""
+}
+
+### 마스터 관리자 회원 가입 API
+POST http://localhost:19091/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "master",
+  "password": "password",
+  "slackId": "master",
+  "master": true,
+  "masterToken": "MASTER_TOKEN_AI_B2B_THREE_III"
+}
+
+### 마스터 로그인 API
+POST http://localhost:19091/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "master",
+  "password": "password"
+}
+> {%
+  client.global.set("token", response.headers.valueOf("Authorization"))
+%}
+
+
+### 허브 이름 조회
+POST http://localhost:19091/api/hubs/hub-names
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "hubIds": [
+    "75780ec9-754c-468b-a264-e8e26f90b007",
+    "9a927b34-15b0-4b24-a216-08a7f7ab12bb"
+  ]
+}

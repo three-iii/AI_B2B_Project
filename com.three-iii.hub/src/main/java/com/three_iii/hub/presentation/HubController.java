@@ -4,6 +4,8 @@ import com.three_iii.hub.application.dtos.HubResponse;
 import com.three_iii.hub.application.service.HubService;
 import com.three_iii.hub.exception.Response;
 import com.three_iii.hub.presentation.dtos.HubCreateRequest;
+import com.three_iii.hub.presentation.dtos.HubNameFindRequest;
+import com.three_iii.hub.presentation.dtos.HubNameFindResponse;
 import com.three_iii.hub.presentation.dtos.HubUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,5 +69,10 @@ public class HubController {
     public Response<?> deleteHub(@PathVariable UUID hubId) {
         hubService.deleteHub(hubId);
         return Response.success("해당 허브가 삭제되었습니다");
+    }
+
+    @PostMapping("/hub-names")
+    public Response<HubNameFindResponse> findHubName(@RequestBody HubNameFindRequest request) {
+        return Response.success(hubService.findHubName(request));
     }
 }
