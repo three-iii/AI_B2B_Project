@@ -62,4 +62,7 @@ public class Delivery extends BaseEntity {
 
     @Column(nullable = false)
     private String slackId;
+
+    //배송자 아이디
+    private UUID shipperId;
 }

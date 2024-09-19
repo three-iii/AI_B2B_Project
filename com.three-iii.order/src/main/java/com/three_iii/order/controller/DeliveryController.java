@@ -7,6 +7,7 @@ import com.three_iii.order.domain.DeliveryStatusEnum;
 import com.three_iii.order.domain.UserPrincipal;
 import com.three_iii.order.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,5 +64,10 @@ public class DeliveryController {
         DeliveryResponseDto responseDto = DeliveryResponseDto.from(delivery);
 
         return Response.success(responseDto);
+    }
+
+    @GetMapping("/days")
+    public List<DeliveryResponseDto> findAllDeliveryBetweenTime() {
+        return deliveryService.findAllDeliveryBetweenTime();
     }
 }

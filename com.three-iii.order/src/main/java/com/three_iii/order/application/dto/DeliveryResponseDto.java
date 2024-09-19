@@ -20,6 +20,7 @@ public class DeliveryResponseDto {
     private UUID destinationHubId;
     private String address;
     private String recipientName;
+    private UUID shipperId;
 
     public static DeliveryResponseDto from(Delivery delivery) {
         return DeliveryResponseDto.builder()
@@ -29,6 +30,7 @@ public class DeliveryResponseDto {
             .destinationHubId(delivery.getDestinationHubId())
             .address(delivery.getAddress())
             .recipientName(delivery.getRecipientName())
+            .shipperId(delivery.getShipperId())
             .build();
     }
 }
