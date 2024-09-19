@@ -2,6 +2,8 @@ package com.three_iii.slack.application.service;
 
 import com.three_iii.slack.application.dtos.WeatherResponse;
 import com.three_iii.slack.application.dtos.WeatherResponse.Item;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,15 @@ public class WeatherService {
     private final WeatherInterface weatherInterface;
 
     private WeatherResponse getWeatherDetail() {
-        return weatherInterface.getCompletion(serviceKey);
+        // 현재 날짜 가져오기
+        LocalDate currentDate = LocalDate.now().minusDays(1);
+
+        // yyyyMMdd 형식으로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = currentDate.format(formatter);
+        log.info("어제 날짜 {}", formattedDate);
+
+        return weatherInterface.getCompletion(serviceKey, formattedDate);
     }
 
     public String getWeather() {
