@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +24,7 @@ import lombok.Setter;
 public class DeliveryPath {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
@@ -43,16 +45,16 @@ public class DeliveryPath {
     private Integer sequence;
 
     @Column(name = "estimated_distance", nullable = false)
-    private String estimatedDistance;
+    private String estimatedDistance = "0.0";
 
     @Column(name = "estimated_duration", nullable = false)
-    private String estimatedDuration;
+    private String estimatedDuration = "0.0";
 
     @Column(name = "actual_distance", nullable = false)
-    private String actualDistance;
+    private String actualDistance = "0.0";
 
     @Column(name = "actual_duration", nullable = false)
-    private String actualDuration;
+    private String actualDuration = "0.0";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

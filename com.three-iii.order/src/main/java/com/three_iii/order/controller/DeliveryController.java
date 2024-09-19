@@ -30,9 +30,9 @@ public class DeliveryController {
     // 배송 전체조회
     @GetMapping
     public Response<Page<DeliveryResponseDto>> findAllDelivery(
-        @RequestParam(required = false) String keyword,
-        Pageable pageable) {
-        return Response.success(deliveryService.findAllDelivery(keyword, pageable));
+        @RequestParam(required = false) String keyword, Pageable pageable,
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return Response.success(deliveryService.findAllDelivery(keyword, pageable, userPrincipal));
     }
 
     // 배송 단건 조회

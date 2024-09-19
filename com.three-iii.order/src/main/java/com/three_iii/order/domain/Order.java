@@ -31,8 +31,8 @@ public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column
-    private UUID Id;
+    @Column(name = "id")
+    private UUID id;
 
     @Column
     private Long userId;
