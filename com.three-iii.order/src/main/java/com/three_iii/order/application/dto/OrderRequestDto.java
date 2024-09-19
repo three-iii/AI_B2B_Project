@@ -32,7 +32,7 @@ public class OrderRequestDto {
 
     public Order toOrder(UserPrincipal userPrincipal, UUID productionCompany, UUID receiptCompany) {
         return Order.builder()
-            .Id(UUID.randomUUID())
+            .id(UUID.randomUUID())
             .userName(userPrincipal.getUsername())
             .productionCompanyId(productionCompany)
             .receiptCompanyId(receiptCompany)

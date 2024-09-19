@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface DeliveryRepositoryCustom {
 
-    Page<DeliveryResponseDto> searchDelivery(String keyword, Pageable pageable);
+    Page<DeliveryResponseDto> searchDelivery(String keyword, String userName, Pageable pageable);
 }

@@ -76,7 +76,7 @@ public class ProductController {
     }
 
     @PutMapping("/restore-stock/{productId}")
-    public Response<Void> restoreStock(@PathVariable UUID productId, @RequestBody int quantity) {
+    public Response<Void> restoreStock(@PathVariable UUID productId, @RequestParam int quantity) {
         productService.restoreStock(productId, quantity);
         return Response.success(null);
     }

@@ -35,10 +35,10 @@ logging:
           jdbc:
             bind: trace
 
-gemini:
-  api:
-    url: https://generativelanguage.googleapis.com
-    key: ${GEMINI_KEY}
+#gemini:
+#  api:
+#    url: https://generativelanguage.googleapis.com
+#    key: ${GEMINI_KEY}
 
 springdoc:
   api-docs:

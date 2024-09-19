@@ -61,7 +61,7 @@ spring:
         - id: order
           uri: lb://orders
           predicates:
-            - Path=/api/orders/**, /api/shippings/**
+            - Path=/api/orders/**, /api/shippings/**, /api/shipping-paths/**
       discovery:
         locator:
           enabled: true

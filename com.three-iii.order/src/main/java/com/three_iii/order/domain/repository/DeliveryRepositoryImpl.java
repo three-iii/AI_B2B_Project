@@ -24,7 +24,8 @@ public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<DeliveryResponseDto> searchDelivery(String keyword, Pageable pageable) {
+    public Page<DeliveryResponseDto> searchDelivery(String keyword, String Username,
+        Pageable pageable) {
 
         List<OrderSpecifier<?>> orders = getAllOrderSpecifiers(pageable);
 

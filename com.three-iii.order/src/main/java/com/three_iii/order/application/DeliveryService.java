@@ -22,8 +22,17 @@ public class DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
 
-    public Page<DeliveryResponseDto> findAllDelivery(String keyword, Pageable pageable) {
-        return deliveryRepository.searchDelivery(keyword, pageable);
+    public Page<DeliveryResponseDto> findAllDelivery(String keyword, Pageable pageable,
+        UserPrincipal userPrincipal) {
+
+        String role = userPrincipal.getRole();
+
+        if (role.equals("SHIPPER")) {
+            return deliveryRepository.searchDelivery(keyword, userPrincipal.getUsername(),
+                pageable);
+        } else {
+            return deliveryRepository.searchDelivery(keyword, null, pageable);
+        }
     }
 
     // 배송 단건 조회
@@ -35,7 +44,8 @@ public class DeliveryService {
                 return new ResponseStatusException(HttpStatus.NOT_FOUND, "배달 정보를 찾을 수 없습니다.");
             });
 
-        if (!delivery.getOrder().getUserName().equals(userPrincipal.getUsername())) {
+        if (!delivery.getOrder().getUserName().equals(userPrincipal.getUsername())
+            || userPrincipal.getRole().equals("SHIPPER")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
         }
         return DeliveryResponseDto.from(delivery);

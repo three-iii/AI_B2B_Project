@@ -61,7 +61,7 @@ public class OrderController {
     @Operation(summary = "주문 수정")
     public ResponseEntity<OrderResponseDto> updateOrder(
         @RequestBody OrderUpdateRequestDto orderUpdateRequestDto,
-        UserPrincipal userPrincipal) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         return ResponseEntity.ok(orderService.updateOrder(orderUpdateRequestDto, userPrincipal));
     }

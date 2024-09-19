@@ -13,10 +13,8 @@ import com.three_iii.company.domain.Product;
 import com.three_iii.company.domain.repository.CompanyRepository;
 import com.three_iii.company.domain.repository.ProductRepository;
 import com.three_iii.company.exception.ApplicationException;
-import jakarta.persistence.EntityNotFoundException;
 import com.three_iii.company.infrastructure.HubService;
 import java.util.Objects;
-
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -111,9 +109,10 @@ public class ProductService {
     @Transactional
     public void restoreStock(UUID productId, int quantity) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new EntityNotFoundException("해당 주문 항목에 해당하는 상품을 찾을 수 없습니다."));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "해당 주문 항목에 해당하는 상품을 찾을 수 없습니다."));
 
-        product.setStock(product.getStock() + quantity);
+        product.setStock(product.getQuantity() + quantity);
         productRepository.save(product);
     }
 
