@@ -5,7 +5,7 @@ Authorization: {{token}}
 
 {
   "userId": "2",
-  "hubId": "75780ec9-754c-468b-a264-e8e26f90b006",
+  "hubId": "75780ec9-754c-468b-a264-e8e26f90b007",
   "shipperType": "HUB_SHIPPER"
 }
 
@@ -15,6 +15,10 @@ Authorization: {{token}}
 
 ### shipper 단건 조회 API
 GET http://localhost:19091/api/shippers/83777343-2ec9-4e92-a3a3-1e5a8dfa1a23
+Authorization: {{token}}
+
+### shipper 타입별 조회 API
+GET http://localhost:19091/api/shippers/type?type=HUB_SHIPPER
 Authorization: {{token}}
 
 ### shipper 수정 API

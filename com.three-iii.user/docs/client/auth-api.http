@@ -3,9 +3,9 @@ POST http://localhost:19091/api/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "password",
-  "slackId": "lingu",
+  "username": "user2",
+  "password": "password2",
+  "slackId": "lingu2",
   "master": false,
   "masterToken": ""
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,6 +44,13 @@ public class ShipperController {
     public Response<ShipperReadResponse> find(@PathVariable(name = "shipperId") String shipperId,
         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return Response.success((shipperService.find(UUID.fromString(shipperId), userPrincipal)));
+    }
+
+    @GetMapping("/type")
+    public Response<List<ShipperReadResponse>> findByType(
+        @RequestParam(name = "type") String type,
+        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return Response.success((shipperService.findByType(type, userPrincipal)));
     }
 
     @PatchMapping("/{shipperId}")
