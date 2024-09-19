@@ -1,5 +1,7 @@
 package com.three_iii.user.application;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.three_iii.user.application.dto.HubNameFindRequest;
 import com.three_iii.user.domain.Role;
 import com.three_iii.user.domain.Shipper;
 import com.three_iii.user.domain.ShipperType;
@@ -13,7 +15,11 @@ import com.three_iii.user.infrastructure.HubClient;
 import com.three_iii.user.presentation.dtos.ShipperCreateRequest;
 import com.three_iii.user.presentation.dtos.ShipperReadResponse;
 import com.three_iii.user.presentation.dtos.ShipperUpdateRequest;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -61,8 +67,8 @@ public class ShipperService {
         // Shipper 목록 조회
         final List<Shipper> shippers = shipperRepository.findAll();
 
-        final List<UUID> shipperIds = shippers.stream()
-            .map(Shipper::getId)
+        final List<String> hubIds = shippers.stream()
+            .map(Shipper::getHubId).map(UUID::toString)
             .toList();
 
         List<ShipperReadResponse> responses = shippers
@@ -70,11 +76,23 @@ public class ShipperService {
             .map(ShipperReadResponse::fromEntity)
             .collect(Collectors.toList());
 
-        // TODO hub 이름 feignClient 로 호출해서 매핑해주기
-//        HashMap<UUID, String> hubNames;
-//
-//        responses.forEach(response ->
-//            response.updateHubName(hubNames.get(response.getHubId())));
+        JsonNode hubNameResponse = hubClient.getHubNames(HubNameFindRequest.from(hubIds));
+        JsonNode hubNamesNode = hubNameResponse.path("result").path("hubNames");
+
+        HashMap<UUID, String> hubNames = new HashMap<>();
+
+        if (hubNamesNode.isObject()) {
+            Iterator<Entry<String, JsonNode>> fields = hubNamesNode.fields();
+            while (fields.hasNext()) {
+                Map.Entry<String, JsonNode> field = fields.next();
+                UUID key = UUID.fromString(field.getKey());
+                String value = field.getValue().asText();
+                hubNames.put(key, value);
+            }
+        }
+
+        responses.forEach(response ->
+            response.updateHubName(hubNames.get(response.getHubId())));
 
         return responses;
     }

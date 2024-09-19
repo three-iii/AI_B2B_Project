@@ -8,7 +8,11 @@ import com.three_iii.hub.application.dtos.HubUpdateDto;
 import com.three_iii.hub.domain.Hub;
 import com.three_iii.hub.domain.repository.HubRepository;
 import com.three_iii.hub.exception.ApplicationException;
+import com.three_iii.hub.presentation.dtos.HubNameFindRequest;
+import com.three_iii.hub.presentation.dtos.HubNameFindResponse;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -65,5 +69,13 @@ public class HubService {
             .orElseThrow(() -> new ApplicationException(NOT_FOUND_HUB));
         hub.update(request);
         return HubResponse.fromEntity(hub);
+    }
+
+    @Transactional(readOnly = true)
+    public HubNameFindResponse findHubName(HubNameFindRequest request) {
+        final List<Hub> hubs = hubRepository.findByIdIn(
+            request.getHubIds().stream().map(hubId -> UUID.fromString(hubId)).collect(
+                Collectors.toList()));
+        return HubNameFindResponse.fromEntity(hubs);
     }
 }
