@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "userId": "2",
+  "userId": "1",
   "hubId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
   "shipperType": "HUB_SHIPPER"
 }
@@ -28,5 +28,5 @@ Authorization: {{token}}
 }
 
 ### shipper 삭제 API
-DELETE http://localhost:19091/api/shippers/c15a097c-0474-4838-ae1f-89780f100ee6
+DELETE http://localhost:19091/api/shippers/985d6aed-363b-468c-a567-9531f99c3b66
 Authorization: {{token}}

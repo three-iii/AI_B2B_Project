@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(name = "UK_USER_SLACK_ID", columnNames = "slack_id")
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
