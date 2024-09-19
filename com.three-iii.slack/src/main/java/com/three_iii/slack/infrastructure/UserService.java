@@ -8,5 +8,5 @@ public interface UserService {
 
     Response<ShipperResponse> findShipper(@PathVariable String shipperId);
 
-    List<ShipperResponse> findShipperList();
+    Response<List<ShipperResponse>> findShipperList();
 }

@@ -12,6 +12,6 @@ public interface UserClient extends UserService {
     @GetMapping("/api/shippers/{shipperId}")
     Response<ShipperResponse> findShipper(@PathVariable String shipperId);
 
-    @GetMapping("/api/")
-    List<ShipperResponse> findShipperList();
+    @GetMapping("/api/shippers/type?type=HUB_SHIPPER")
+    Response<List<ShipperResponse>> findShipperList();
 }

@@ -13,6 +13,7 @@ import com.three_iii.slack.infrastructure.HubResponse;
 import com.three_iii.slack.infrastructure.HubService;
 import com.three_iii.slack.infrastructure.OrderResponse;
 import com.three_iii.slack.infrastructure.OrderService;
+import com.three_iii.slack.infrastructure.ShipperResponse;
 import com.three_iii.slack.infrastructure.UserService;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,15 +73,15 @@ public class ScheduleService {
                     + weatherInfo + "\n"
                     + "배송지 주소: " + deliveryResponse.getAddress() + "\n"
                     + "수령인: " + deliveryResponse.getRecipientName());
-            log.info("메세지 {}", message);
+            log.info("ai가 생성한 메세지: {}", message);
             slackService.createSlackMessage(new SlackDto(slackId, message));
         }
 
     }
 
     // 허브 배송 담당자에게 허브별 주문 사항에 대한 알림 처리
-    @Scheduled(cron = " 0 0/1 * * * *")
-    //@Scheduled(cron = " 0 0 8 * * *") //매일 9시에 실행
+    //@Scheduled(cron = " 0 0/1 * * * *")
+    @Scheduled(cron = " 0 0 8 * * *") //매일 9시에 실행
     public void hubShipperSchedule() throws SlackApiException, IOException {
         List<OrderResponse> orderResponseList = orderService.findAllOrderBetweenTime();
         // 허브ID별로 주문을 그룹화하기 위한 맵
@@ -105,18 +106,17 @@ public class ScheduleService {
                     + "허브 주소: " + hubResponse.getAddress() + "\n"
                     + "허브 전화번호: " + hubResponse.getPhone_number() + "\n"
                     + "총 주문 건수: " + orderResponses.size());
-            log.info("메세지: {}", message);
+            log.info("ai가 생성한 메세지: {}", message);
             sb.append(message);
         }));
 
-//        try {
-//            slackService.createSlackMessage(
-//                new SlackDto("U07MM562S56", "총 " + orderResponses.size() + "개의 주문이 접수되었습니다."));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } catch (SlackApiException e) {
-//            throw new RuntimeException(e);
-//        }
+        //허브 배송 담당자 리스트 가져오기
+        List<ShipperResponse> shipperList = userService.findShipperList().getResult();
+
+        for (ShipperResponse shipperResponse : shipperList) {
+            slackService.createSlackMessage(
+                new SlackDto(shipperResponse.getSlackId(), sb.toString()));
+        }
     }
 
 }
