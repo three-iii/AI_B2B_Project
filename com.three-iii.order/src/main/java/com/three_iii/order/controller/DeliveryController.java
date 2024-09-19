@@ -66,6 +66,7 @@ public class DeliveryController {
         return Response.success(responseDto);
     }
 
+    // 스케줄러용 호출 api
     @GetMapping("/days")
     public List<DeliveryResponseDto> findAllDeliveryBetweenTime() {
         return deliveryService.findAllDeliveryBetweenTime();

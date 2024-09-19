@@ -8,6 +8,7 @@ import com.three_iii.order.application.dto.OrderUpdateRequestDto;
 import com.three_iii.order.domain.UserPrincipal;
 import com.three_iii.order.exception.Response;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,5 +85,11 @@ public class OrderController {
 
         orderService.deleteOrder(orderId, userPrincipal);
         return ResponseEntity.ok("주문 삭제 성공");
+    }
+
+    // 스케줄러용 호출 api
+    @GetMapping("/days")
+    public List<OrderResponseDto> findAllOrderBetweenTime() {
+        return orderService.findAllOrderBetweenTime();
     }
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -354,5 +355,17 @@ public class OrderService {
         order.delete("");
 
 //        orderRepository.save(order);
+    }
+
+    public List<OrderResponseDto> findAllOrderBetweenTime() {
+        // 24시간 범위로 주문 조회
+        LocalDateTime startTime = LocalDateTime.now().minusDays(1);
+        LocalDateTime endTime = LocalDateTime.now();
+        List<Order> deliveries = orderRepository.findAllByCreatedAtBetween(startTime,
+            endTime);
+
+        return deliveries.stream()
+            .map(OrderResponseDto::from)
+            .collect(Collectors.toList());
     }
 }
